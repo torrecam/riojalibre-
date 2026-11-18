@@ -1,8 +1,10 @@
 const TZ = "Europe/Madrid";
 
-const eur = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0 });
-const eur2 = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2 });
-const entero = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0 });
+// useGrouping "always": en es-ES Intl no agrupa los números de 4 cifras (1234 → 1.234).
+const eur = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", maximumFractionDigits: 0, useGrouping: "always" });
+const eur2 = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR", minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: "always" });
+const entero = new Intl.NumberFormat("es-ES", { maximumFractionDigits: 0, useGrouping: "always" });
+const dec = (max: number) => new Intl.NumberFormat("es-ES", { maximumFractionDigits: max, useGrouping: "always" });
 
 export function euros(n: number | null | undefined, decimales = false) {
   if (n === null || n === undefined || Number.isNaN(n)) return "—";
@@ -13,9 +15,8 @@ export function euros(n: number | null | undefined, decimales = false) {
 export function eurosCompacto(n: number | null | undefined) {
   if (n === null || n === undefined) return "—";
   const a = Math.abs(n);
-  if (a >= 1e9) return `${(n / 1e9).toLocaleString("es-ES", { maximumFractionDigits: 2 })} mil M€`;
-  if (a >= 1e6) return `${(n / 1e6).toLocaleString("es-ES", { maximumFractionDigits: a >= 1e8 ? 0 : 1 })} M€`;
-  if (a >= 1e3) return `${(n / 1e3).toLocaleString("es-ES", { maximumFractionDigits: 0 })} mil €`;
+  if (a >= 1e6) return `${dec(a >= 1e8 ? 0 : 1).format(n / 1e6)} M€`;
+  if (a >= 1e4) return `${dec(0).format(n / 1e3)} mil €`;
   return euros(n);
 }
 

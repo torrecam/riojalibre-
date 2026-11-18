@@ -35,7 +35,7 @@ export default async function Red({ searchParams }: { searchParams: Promise<SP> 
           <button className="btn-secundario">Actualizar</button>
           <span className="text-stone-500">Arrastra nodos · rueda para zoom · clic para ver conexiones</span>
         </form>
-        <Grafo aristas={aristas} destacada={str(sp, "empresa")} />
+        <Grafo key={`${nOrg}-${nEmp}`} aristas={aristas} destacada={str(sp, "empresa")} />
       </Contenedor>
     </>
   );

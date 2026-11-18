@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { forceCenter, forceCollide, forceLink, forceManyBody, forceSimulation, type SimulationNodeDatum } from "d3-force";
+import { forceCenter, forceCollide, forceLink, forceManyBody, forceSimulation, forceX, forceY, type SimulationNodeDatum } from "d3-force";
 import { useMemo, useRef, useState } from "react";
 
 type Arista = { organismo_id: string; organismo: string; empresa_id: string; empresa: string; nif: string | null; contratos: number; importe: number };
@@ -16,7 +16,7 @@ const fmt = new Intl.NumberFormat("es-ES", { style: "currency", currency: "EUR",
 export function Grafo({ aristas, destacada }: { aristas: Arista[]; destacada?: string }) {
   const W = 1100;
   const H = 720;
-  const { nodos, enlaces } = useMemo(() => {
+  const { nodos, enlaces, encaje } = useMemo(() => {
     const m = new Map<string, Nodo>();
     for (const a of aristas) {
       const o = m.get("o" + a.organismo_id) ?? { id: "o" + a.organismo_id, nombre: a.organismo, tipo: "org" as const, total: 0, x: 0, y: 0 };
@@ -33,10 +33,18 @@ export function Grafo({ aristas, destacada }: { aristas: Arista[]; destacada?: s
       .force("link", forceLink<Nodo, (typeof enlaces)[number]>(enlaces as never).id((d) => d.id).distance(60).strength(0.4))
       .force("charge", forceManyBody().strength(-60))
       .force("center", forceCenter(W / 2, H / 2))
+      .force("x", forceX(W / 2).strength(0.06))
+      .force("y", forceY(H / 2).strength(0.08))
       .force("collide", forceCollide<Nodo>().radius((d) => radioCon(d, maxT) + 2))
       .stop();
     for (let i = 0; i < 320; i++) sim.tick();
-    return { nodos, enlaces: enlaces as unknown as { source: Nodo; target: Nodo; importe: number; contratos: number }[] };
+    // Encaje inicial: escala y centra el grafo para que quepa entero en el lienzo.
+    const xs = nodos.map((n) => n.x);
+    const ys = nodos.map((n) => n.y);
+    const [x0, x1, y0, y1] = [Math.min(...xs) - 40, Math.max(...xs) + 40, Math.min(...ys) - 40, Math.max(...ys) + 40];
+    const k = Math.min(2, W / Math.max(1, x1 - x0), H / Math.max(1, y1 - y0));
+    const encaje = { k, x: (W - (x0 + x1) * k) / 2, y: (H - (y0 + y1) * k) / 2 };
+    return { encaje, nodos, enlaces: enlaces as unknown as { source: Nodo; target: Nodo; importe: number; contratos: number }[] };
   }, [aristas]);
 
   const maxTotal = Math.max(1, ...nodos.map((n) => n.total));
@@ -44,7 +52,7 @@ export function Grafo({ aristas, destacada }: { aristas: Arista[]; destacada?: s
 
   const [, setVersion] = useState(0);
   const [sel, setSel] = useState<string | null>(destacada ? "e" + destacada : null);
-  const [vista, setVista] = useState({ k: 1, x: 0, y: 0 });
+  const [vista, setVista] = useState(encaje);
   const arrastre = useRef<{ nodo?: Nodo; px: number; py: number; moved: boolean } | null>(null);
   const svgRef = useRef<SVGSVGElement>(null);
 

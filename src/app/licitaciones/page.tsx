@@ -35,7 +35,7 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
       />
       <Contenedor className="py-6">
         <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
-          <aside>
+          <aside id="filtros" className="order-last lg:order-none">
             <form className="card space-y-4 p-5 lg:sticky lg:top-20" action="/licitaciones">
               <div className="flex items-center justify-between">
                 <h2 className="font-semibold">Filtros</h2>
@@ -126,6 +126,14 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
           </aside>
 
           <div className="min-w-0">
+            <form action="/licitaciones" className="mb-4 flex gap-2 lg:hidden">
+              {Object.entries(sp).filter(([k, v]) => k !== "q" && k !== "pagina" && typeof v === "string" && v).map(([k, v]) => (
+                <input key={k} type="hidden" name={k} value={v as string} />
+              ))}
+              <input className="input" name="q" defaultValue={f.q} placeholder="Buscar licitaciones…" aria-label="Buscar licitaciones" />
+              <button className="btn-primario">Buscar</button>
+              <a href="#filtros" className="btn-secundario whitespace-nowrap">Filtros ↓</a>
+            </form>
             <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-stone-600"><strong className="text-stone-900">{numero(total)}</strong> licitaciones encontradas</p>
               <div className="flex flex-wrap gap-1.5 text-xs">
