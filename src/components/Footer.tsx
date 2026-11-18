@@ -13,7 +13,7 @@ const EXPLORAR = [
 const PROYECTO = [
   ["/metodologia", "Metodología"],
   ["/actualizaciones", "Estado de las cargas"],
-  ["/creditos", "Créditos de imágenes"],
+  ["/creditos", "Créditos"],
   ["/aviso-legal", "Aviso legal"],
   ["/privacidad", "Privacidad"],
   ["/cookies", "Cookies"],
@@ -71,7 +71,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-stone-100 py-5 text-center text-xs text-stone-400">
-        Datos reutilizados bajo CC BY 4.0 y Ley 37/2007 · Fotos: Wikimedia Commons (<Link href="/creditos" className="underline-offset-2 hover:underline">créditos</Link>) · Código abierto
+        Datos reutilizados bajo CC BY 4.0 y Ley 37/2007 · Ilustraciones propias · Iconos Lucide (<Link href="/creditos" className="underline-offset-2 hover:underline">créditos</Link>) · Código abierto
       </div>
     </footer>
   );

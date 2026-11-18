@@ -27,9 +27,31 @@
 
   --animate-entrar: entrar 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   --animate-flotar: flotar 7s ease-in-out infinite;
-  --animate-zoom-lento: zoom-lento 24s ease-out both;
   --animate-brillo: brillo 3s linear infinite;
 
+  --animate-fluir: fluir 3s linear infinite;
+  --animate-latido: latido 2.8s ease-in-out infinite;
+  --animate-deriva: deriva 18s ease-in-out infinite alternate;
+  --animate-campana: campana 0.9s ease-in-out;
+
+  @keyframes fluir {
+    to { stroke-dashoffset: -16; }
+  }
+  @keyframes latido {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.8); opacity: 0.2; }
+  }
+  @keyframes deriva {
+    from { transform: translateX(-40px); }
+    to { transform: translateX(40px); }
+  }
+  @keyframes campana {
+    0%, 100% { transform: rotate(0); }
+    20% { transform: rotate(14deg); }
+    40% { transform: rotate(-12deg); }
+    60% { transform: rotate(8deg); }
+    80% { transform: rotate(-4deg); }
+  }
   @keyframes entrar {
     from { opacity: 0; transform: translateY(18px); }
     to { opacity: 1; transform: none; }
@@ -37,10 +59,6 @@
   @keyframes flotar {
     0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
     50% { transform: translate3d(0, -14px, 0) scale(1.04); }
-  }
-  @keyframes zoom-lento {
-    from { transform: scale(1.12); }
-    to { transform: scale(1); }
   }
   @keyframes brillo {
     to { background-position: 200% center; }

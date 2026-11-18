@@ -1,34 +1,35 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import { Camera } from "lucide-react";
+import { ArrowUpRight, Palette, Shapes } from "lucide-react";
 import { Cabecera, Contenedor } from "@/components/ui";
-import { CREDITOS_IMAGENES } from "@/lib/creditos";
+import { IlustEstadisticas, IlustLicitaciones, IlustSubvenciones } from "@/components/Ilustraciones";
 
-export const metadata: Metadata = { title: "Créditos de imágenes" };
+export const metadata: Metadata = { title: "Créditos" };
 
 export default function Creditos() {
   return (
     <>
-      <Cabecera titulo="Créditos de imágenes" icono={<Camera />} subtitulo="Fotos libres de Wikimedia Commons, redimensionadas y en WebP." />
-      <Contenedor className="py-8">
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {CREDITOS_IMAGENES.map((c) => (
-            <li key={c.archivo} className="card overflow-hidden">
-              <div className="relative aspect-[4/3]">
-                <Image src={c.archivo} alt={c.titulo} fill sizes="(min-width:1024px) 25vw, (min-width:640px) 50vw, 100vw" className="object-cover" />
-              </div>
-              <div className="space-y-1 p-4 text-sm">
-                <p className="font-semibold text-stone-900">{c.titulo}</p>
-                <p className="text-stone-500">{c.autor}</p>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  <a href={c.licenciaUrl} target="_blank" rel="noreferrer" className="chip bg-vid-50 text-vid-700 hover:underline">{c.licencia}</a>
-                  <a href={c.fuente} target="_blank" rel="noreferrer" className="chip bg-stone-100 text-stone-600 hover:underline">Commons</a>
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
-        <p className="mt-6 text-xs text-stone-500">Las obras derivadas de fotos CC BY-SA se comparten con la misma licencia. Iconos: Lucide (ISC).</p>
+      <Cabecera titulo="Créditos" icono={<Palette />} subtitulo="Sin fotos de terceros: todo el arte es propio." />
+      <Contenedor className="grid gap-5 py-8 md:grid-cols-2">
+        <section className="card overflow-hidden">
+          <div className="grid grid-cols-3 bg-gradient-to-br from-vino-50 via-surface to-vid-50">
+            <IlustLicitaciones />
+            <IlustSubvenciones />
+            <IlustEstadisticas />
+          </div>
+          <div className="p-5">
+            <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">Ilustraciones y logotipo</h2>
+            <p className="mt-1 text-sm text-stone-500">SVG hechos a mano para Rioja Abierta. La silueta de La Rioja es estilizada, no cartográfica.</p>
+          </div>
+        </section>
+        <section className="card p-5">
+          <Shapes className="h-8 w-8 text-vino-600" aria-hidden />
+          <h2 className="mt-3 font-[family-name:var(--font-display)] text-lg font-bold">Iconos</h2>
+          <p className="mt-1 text-sm text-stone-500">Lucide, con licencia ISC.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <a href="https://lucide.dev/" target="_blank" rel="noreferrer" className="chip bg-stone-100 text-stone-600 hover:underline">lucide.dev <ArrowUpRight className="h-3 w-3" /></a>
+            <a href="https://github.com/lucide-icons/lucide/blob/main/LICENSE" target="_blank" rel="noreferrer" className="chip bg-vid-50 text-vid-700 hover:underline">ISC <ArrowUpRight className="h-3 w-3" /></a>
+          </div>
+        </section>
       </Contenedor>
     </>
   );

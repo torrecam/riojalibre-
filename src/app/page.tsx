@@ -1,10 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight, BarChart3, Building2, Download, FileSearch, Filter, HandCoins, Receipt, Search, ShieldCheck, Sparkles, Trophy, Users, Zap,
 } from "lucide-react";
 import { Contenedor, Estado, SinBD } from "@/components/ui";
 import { Contador } from "@/components/Animado";
+import { FondoHero, IlustCTA, IlustEstadisticas, IlustGanadores, IlustLicitaciones, IlustMenores, IlustOrganismo, IlustSubvenciones } from "@/components/Ilustraciones";
 import { actividadReciente, kpisGenerales, topAdjudicatarios } from "@/lib/queries/estadisticas";
 import { hayBaseDeDatos } from "@/lib/db";
 import { eurosCompacto, fecha, fechaHora, numero } from "@/lib/format";
@@ -13,12 +13,12 @@ import { enlaceEmpresa } from "@/lib/queries/entidades";
 export const dynamic = "force-dynamic";
 
 const USOS = [
-  { titulo: "Licitaciones abiertas", texto: "Concursos en plazo, hoy.", href: "/licitaciones?estado=En+plazo", img: "/img/palacio-gobierno.webp", alt: "Palacio de la Presidencia del Gobierno de La Rioja", icono: FileSearch, color: "from-emerald-500 to-emerald-700" },
-  { titulo: "Quién gana contratos", texto: "Ranking de empresas por importe.", href: "/empresas", img: "/img/barricas.webp", alt: "Barricas de vino en una bodega riojana", icono: Trophy, color: "from-amber-500 to-orange-600" },
-  { titulo: "Sigue a un organismo", texto: "Todo lo que contrata cada uno.", href: "/organismos", img: "/img/puente-piedra.webp", alt: "Puente de Piedra sobre el Ebro en Logroño", icono: Building2, color: "from-sky-500 to-indigo-600" },
-  { titulo: "Subvenciones", texto: "Ayudas concedidas y a quién.", href: "/subvenciones", img: "/img/vinedos-rodezno.webp", alt: "Viñedos en Rodezno", icono: HandCoins, color: "from-vid-500 to-vid-700" },
-  { titulo: "Contratos menores", texto: "El gasto pequeño, uno a uno.", href: "/contratos-menores", img: "/img/calle-laurel.webp", alt: "Calle del Laurel en Logroño", icono: Receipt, color: "from-vino-500 to-vino-700" },
-  { titulo: "Compara en gráficos", texto: "Años, tipos y organismos.", href: "/estadisticas", img: "/img/briones.webp", alt: "Vista de Briones entre viñedos", icono: BarChart3, color: "from-fuchsia-500 to-purple-700" },
+  { titulo: "Licitaciones abiertas", texto: "Concursos en plazo, hoy.", href: "/licitaciones?estado=En+plazo", Ilust: IlustLicitaciones, icono: FileSearch, color: "from-emerald-500 to-emerald-700" },
+  { titulo: "Quién gana contratos", texto: "Ranking de empresas por importe.", href: "/empresas", Ilust: IlustGanadores, icono: Trophy, color: "from-amber-500 to-orange-600" },
+  { titulo: "Sigue a un organismo", texto: "Todo lo que contrata cada uno.", href: "/organismos", Ilust: IlustOrganismo, icono: Building2, color: "from-sky-500 to-indigo-600" },
+  { titulo: "Subvenciones", texto: "Ayudas concedidas y a quién.", href: "/subvenciones", Ilust: IlustSubvenciones, icono: HandCoins, color: "from-vid-500 to-vid-700" },
+  { titulo: "Contratos menores", texto: "El gasto pequeño, uno a uno.", href: "/contratos-menores", Ilust: IlustMenores, icono: Receipt, color: "from-vino-500 to-vino-700" },
+  { titulo: "Compara en gráficos", texto: "Años, tipos y organismos.", href: "/estadisticas", Ilust: IlustEstadisticas, icono: BarChart3, color: "from-fuchsia-500 to-purple-700" },
 ];
 
 const PASOS = [
@@ -50,19 +50,7 @@ export default async function Inicio() {
     <>
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-vino-950 text-white">
-        <Image
-          src="/img/hero-briones-ebro.webp"
-          alt="El valle del Ebro y los viñedos desde Briones, La Rioja"
-          fill
-          preload
-          fetchPriority="high"
-          sizes="100vw"
-          quality={70}
-          className="-z-20 animate-zoom-lento object-cover"
-        />
-        <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#2e0f1b]/80 via-[#521d31]/55 to-[#2e0f1b]/95" aria-hidden />
-        <div className="absolute -top-24 -left-24 -z-10 h-96 w-96 animate-flotar rounded-full bg-[#ab4466]/40 blur-3xl" aria-hidden />
-        <div className="absolute -right-20 bottom-10 -z-10 h-80 w-80 animate-flotar rounded-full bg-[#5d8a3c]/35 blur-3xl [animation-delay:-3s]" aria-hidden />
+        <FondoHero />
 
         <Contenedor className="relative pt-28 pb-14 sm:pt-36 sm:pb-20">
           <div className="max-w-3xl animate-entrar">
@@ -119,17 +107,20 @@ export default async function Inicio() {
         <Titulo eyebrow="Qué puedes hacer" titulo="Seis formas de seguir el dinero" />
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {USOS.map((u) => (
-            <Link key={u.href} href={u.href} className="revelar group relative isolate flex min-h-64 flex-col justify-end overflow-hidden rounded-3xl p-6 text-white shadow-lg shadow-stone-900/10 ring-1 ring-black/5">
-              <Image src={u.img} alt={u.alt} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="-z-20 object-cover transition duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 -z-10 bg-gradient-to-t from-black/85 via-black/35 to-black/5" aria-hidden />
-              <span className={`absolute top-5 left-5 grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br ${u.color} shadow-lg transition duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]`}>
-                <u.icono className="h-5 w-5" aria-hidden />
-              </span>
-              <h3 className="font-[family-name:var(--font-display)] text-2xl font-bold">{u.titulo}</h3>
-              <p className="mt-1 text-white/80">{u.texto}</p>
-              <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold">
-                Explorar <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
-              </span>
+            <Link key={u.href} href={u.href} className="card card-hover revelar group flex flex-col overflow-hidden">
+              <div className="relative aspect-[16/9] overflow-hidden bg-gradient-to-br from-vino-50 via-surface to-vid-50">
+                <u.Ilust />
+                <span className={`absolute top-4 left-4 grid h-10 w-10 place-items-center rounded-2xl bg-gradient-to-br ${u.color} text-white shadow-lg transition duration-300 group-hover:scale-110 group-hover:rotate-[-6deg]`}>
+                  <u.icono className="h-5 w-5" aria-hidden />
+                </span>
+              </div>
+              <div className="flex flex-1 flex-col border-t border-stone-100 p-5">
+                <h3 className="font-[family-name:var(--font-display)] text-xl font-bold text-stone-900 group-hover:text-vino-700">{u.titulo}</h3>
+                <p className="mt-1 text-stone-500">{u.texto}</p>
+                <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-vino-700">
+                  Explorar <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" aria-hidden />
+                </span>
+              </div>
             </Link>
           ))}
         </div>
@@ -228,14 +219,15 @@ export default async function Inicio() {
 
       {/* CTA */}
       <Contenedor>
-        <section className="revelar relative isolate overflow-hidden rounded-[2rem] px-6 py-14 text-center text-white shadow-2xl shadow-vino-900/20 sm:px-12 sm:py-20">
-          <Image src="/img/vinedos-calvario.webp" alt="" fill sizes="(min-width:1280px) 1232px, 100vw" className="-z-20 object-cover" />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-br from-[#521d31]/90 via-[#772541]/75 to-[#385726]/80" aria-hidden />
-          <h2 className="mx-auto max-w-2xl font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-balance sm:text-5xl">
+        <section className="revelar relative isolate grid items-center gap-8 overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#521d31] via-[#772541] to-[#385726] px-6 py-14 text-center text-white shadow-2xl shadow-vino-900/20 sm:px-12 sm:py-16 lg:grid-cols-[1.1fr_1fr] lg:text-left">
+          <div className="punteado pointer-events-none absolute inset-0 -z-10 text-white/10 [mask-image:radial-gradient(ellipse_at_center,black,transparent_75%)]" aria-hidden />
+          <div className="pointer-events-none absolute -right-16 -bottom-24 -z-10 h-72 w-72 animate-flotar rounded-full bg-[#a3c47a]/25 blur-3xl" aria-hidden />
+          <div>
+          <h2 className="mx-auto max-w-2xl font-[family-name:var(--font-display)] text-3xl font-extrabold tracking-tight text-balance sm:text-5xl lg:mx-0">
             ¿A quién contrata tu ayuntamiento?
           </h2>
-          <p className="mx-auto mt-3 max-w-md text-white/80">Descúbrelo en segundos.</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <p className="mx-auto mt-3 max-w-md text-white/80 lg:mx-0">Descúbrelo en segundos.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
             <Link href="/organismos" className="flex items-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-[#632139] shadow-lg transition hover:scale-[1.03]">
               <Building2 className="h-5 w-5" /> Elegir organismo
             </Link>
@@ -243,6 +235,8 @@ export default async function Inicio() {
               <Search className="h-5 w-5" /> Buscar contratos
             </Link>
           </div>
+          </div>
+          <IlustCTA className="mx-auto w-full max-w-md" />
         </section>
       </Contenedor>
     </>
