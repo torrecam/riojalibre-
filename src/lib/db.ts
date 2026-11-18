@@ -19,6 +19,10 @@ function crear() {
     prepare: false, // compatible con el pooler de Supabase (pgbouncer/supavisor en modo transacción)
     idle_timeout: 20,
     connect_timeout: 15,
+    // Supavisor (pooler de Supabase, puerto 6543) se cuelga con consultas en pipeline en modo transacción:
+    // una consulta en vuelo por conexión, y un límite para no agotar los 300 s de la función.
+    max_pipeline: local ? 100 : 1,
+    query_timeout: local ? 0 : 25,
     ssl: local ? false : "require",
     types: {
       // numeric e int8 como number (los importes caben de sobra en float64)

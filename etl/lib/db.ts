@@ -12,6 +12,8 @@ export const sql = postgres(url, {
   prepare: false,
   idle_timeout: 20,
   connect_timeout: 30,
+  // Supavisor en modo transacción se cuelga con consultas en pipeline: una consulta en vuelo por conexión.
+  max_pipeline: /localhost|127\.0\.0\.1/.test(url) ? 100 : 1,
   onnotice: () => {},
   ssl: /localhost|127\.0\.0\.1/.test(url) ? false : "require",
 });
