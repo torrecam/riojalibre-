@@ -10,7 +10,12 @@ export default function Privacidad() {
       <Contenedor className="py-8">
         <article className="prosa max-w-3xl">
           <h2>Usuarios del portal</h2>
-          <p>No hay registro de usuarios ni formularios que recojan datos personales. No se usa analítica de terceros ni publicidad.</p>
+          <p>
+            La consulta es libre y anónima. Si creas una cuenta, guardamos tu correo (para identificarte y enviarte los enlaces de acceso) y el perfil de
+            empresa y los seguimientos que tú introduces, con el único fin de calcular la idoneidad de las licitaciones y mostrarte tu tablero. Solo tú
+            puedes ver esos datos (control de acceso por fila en la base de datos) y se borran al eliminar la cuenta. Base jurídica: ejecución del servicio
+            que solicitas (art. 6.1.b RGPD). No se usa analítica de terceros ni publicidad.
+          </p>
           <h2>Datos publicados</h2>
           <p>
             Los registros mostrados proceden de publicaciones oficiales obligatorias en materia de transparencia y contratación pública (Ley 9/2017, de

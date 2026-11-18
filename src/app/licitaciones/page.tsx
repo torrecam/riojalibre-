@@ -5,6 +5,10 @@ import { Cabecera, Contenedor, Estado, Fuente, Paginacion, SinBD, Vacio } from "
 import { hayBaseDeDatos } from "@/lib/db";
 import { euros, fecha, numero } from "@/lib/format";
 import { pagina, qs, type SP } from "@/lib/params";
+import { usuarioActual } from "@/lib/usuario";
+import { idoneidadDe } from "@/lib/queries/usuario";
+import { Insignia } from "@/components/cuenta/Idoneidad";
+import { EstadoChip } from "@/components/cuenta/EstadoChip";
 import { buscarLicitaciones, filtrosDesde, opcionesFiltros, TAM_PAGINA } from "@/lib/queries/licitaciones";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +27,8 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
   const sp = await searchParams;
   const f = filtrosDesde(sp);
   const pag = pagina(sp);
-  const [{ filas, total }, op] = await Promise.all([buscarLicitaciones(f, pag), opcionesFiltros()]);
+  const [{ filas, total }, op, yo] = await Promise.all([buscarLicitaciones(f, pag), opcionesFiltros(), usuarioActual()]);
+  const ido = yo ? await idoneidadDe(yo.id, filas.map((l) => l.id)).catch(() => new Map()) : new Map();
   const hayFiltros = Object.entries(f).some(([k, v]) => k !== "orden" && v !== undefined);
   const csv = `/api/licitaciones/csv${qs(sp, { pagina: undefined })}`;
 
@@ -156,6 +161,8 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="min-w-0">
                         <div className="mb-1.5 flex flex-wrap items-center gap-2">
+                          {ido.get(l.id) && <Insignia p={ido.get(l.id)!.puntuacion} />}
+                          {ido.get(l.id)?.seguimiento && <EstadoChip e={ido.get(l.id)!.seguimiento!} />}
                           <Estado v={l.estado} />
                           {l.tipo && <span className="text-xs text-stone-500">{l.tipo}</span>}
                           <Fuente v={l.fuente} />

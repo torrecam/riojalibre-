@@ -18,8 +18,8 @@ export default function Cookies() {
             estrictamente técnica.
           </p>
           <p>
-            Si en el futuro se habilita un acceso de administración, este usará únicamente cookies técnicas de sesión, estrictamente necesarias y exentas de
-            consentimiento según el artículo 22.2 de la LSSI.
+            Si inicias sesión, se guardan cookies técnicas de sesión de Supabase Auth (<code>sb-…-auth-token</code>), estrictamente necesarias para
+            mantenerte identificado y exentas de consentimiento según el artículo 22.2 de la LSSI. Se borran al salir.
           </p>
         </article>
       </Contenedor>

@@ -5,6 +5,7 @@ import { CalendarClock, ClipboardList, Euro, Gavel, Layers, Tags, Users } from "
 import { Cabecera, Contenedor, Dato, EnlaceExterno, Estado, Fuente, Kpi, Seccion } from "@/components/ui";
 import { euros, eurosCompacto, fecha, fechaHora, numero } from "@/lib/format";
 import { licitacion } from "@/lib/queries/licitaciones";
+import { BloqueIdoneidad } from "@/components/cuenta/BloqueIdoneidad";
 
 export const dynamic = "force-dynamic";
 
@@ -45,6 +46,7 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
         <Kpi etiqueta="Ofertas" icono={<Users />} valor={l.num_licitadores !== null ? numero(l.num_licitadores) : "—"} />
         <Kpi etiqueta={l.fecha_fin_ofertas ? "Fin de ofertas" : "Publicada"} icono={<CalendarClock />} valor={<span className="text-xl sm:text-2xl">{fecha(l.fecha_fin_ofertas ?? l.fecha_publicacion)}</span>} detalle={duracion ?? undefined} />
       </Contenedor>
+      <BloqueIdoneidad licitacionId={l.id} />
       <Contenedor className="grid gap-6 py-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <Seccion titulo="Expediente" icono={<ClipboardList />}>

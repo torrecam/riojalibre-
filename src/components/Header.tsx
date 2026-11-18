@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { BarChart3, BookOpen, Building2, FileSearch, Gavel, HandCoins, Menu, Network, Receipt, Search, Users, X } from "lucide-react";
 import { Logo } from "./Logo";
 import { BotonTema } from "./Tema";
+import { ENLACES_MI, MenuUsuario, useSesion } from "./cuenta/MenuUsuario";
 
 export const NAV = [
   { href: "/licitaciones", label: "Licitaciones", icono: FileSearch },
@@ -24,6 +25,7 @@ export function Header() {
   const [scroll, setScroll] = useState(false);
   const activo = (href: string) => path === href || path.startsWith(href + "/");
   const portada = path === "/";
+  const email = useSesion();
 
   useEffect(() => {
     const f = () => setScroll(window.scrollY > 12);
@@ -65,10 +67,11 @@ export function Header() {
         </nav>
         <div className="ml-auto flex items-center gap-1 xl:ml-0">
           <Link href="/licitaciones" aria-label="Buscar" title="Buscar"
-            className={`grid h-9 w-9 place-items-center rounded-xl transition ${transparente ? "text-white hover:bg-white/15" : "text-stone-600 hover:bg-stone-100 hover:text-vino-700"}`}>
+            className={`hidden h-9 w-9 place-items-center rounded-xl transition sm:grid ${transparente ? "text-white hover:bg-white/15" : "text-stone-600 hover:bg-stone-100 hover:text-vino-700"}`}>
             <Search className="h-[18px] w-[18px]" />
           </Link>
           <BotonTema className={transparente ? "!text-white hover:!bg-white/15" : ""} />
+          <MenuUsuario key={path} email={email} transparente={transparente} />
           <button
             type="button"
             className={`grid h-9 w-9 place-items-center rounded-xl xl:hidden ${transparente ? "text-white hover:bg-white/15" : "text-stone-700 hover:bg-stone-100"}`}
@@ -92,6 +95,13 @@ export function Header() {
               >
                 <n.icono className="h-4 w-4 shrink-0 text-vino-600" />
                 {n.label}
+              </Link>
+            ))}
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 border-t border-stone-200 pt-3 sm:grid-cols-4">
+            {(email ? ENLACES_MI : [{ href: "/entrar", t: "Entrar", i: ENLACES_MI[0].i }, { href: "/registro", t: "Crear cuenta", i: ENLACES_MI[1].i }]).map((n) => (
+              <Link key={n.href} href={n.href} onClick={() => setAbierto(false)} className="flex items-center gap-2.5 rounded-xl bg-vino-50 px-3 py-3 text-sm font-medium text-vino-800">
+                <n.i className="h-4 w-4 shrink-0" /> {n.t}
               </Link>
             ))}
           </div>
