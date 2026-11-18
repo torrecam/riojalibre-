@@ -75,13 +75,13 @@ export function EditorPerfil({ inicial, nombresOrganismos, procedimientos, cpvSu
       <div className="rounded-2xl border border-stone-200 p-4">
         <label className="flex items-center gap-3">
           <input type="checkbox" checked={p.alertas_email} onChange={(e) => set("alertas_email", e.target.checked)} className="h-5 w-5 accent-[var(--color-vino-600)]" />
-          <span><span className="font-semibold text-stone-900">Avisarme por correo</span><span className="block text-xs text-stone-500">Resumen de licitaciones nuevas que superen tu umbral. (Envío en preparación.)</span></span>
+          <span><span className="font-semibold text-stone-900">Alertas por correo</span><span className="block text-xs text-stone-500">Cada mañana a las 9:00, las licitaciones nuevas en plazo que superen tu idoneidad mínima. Si no hay ninguna, no te escribimos.</span></span>
         </label>
         {p.alertas_email && (
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
             <label className="block"><span className="label">Frecuencia</span>
               <select className="input mt-1.5 w-full" value={p.alertas_frecuencia} onChange={(e) => set("alertas_frecuencia", e.target.value as "diaria" | "semanal")}>
-                <option value="diaria">Diaria</option><option value="semanal">Semanal</option>
+                <option value="diaria">Diaria (9:00)</option><option value="semanal">Semanal (lunes, 9:00)</option>
               </select></label>
             <label className="block"><span className="label">Idoneidad mínima: {p.alertas_umbral}</span>
               <input type="range" min={0} max={100} step={5} value={p.alertas_umbral} onChange={(e) => set("alertas_umbral", Number(e.target.value))} className="mt-3 w-full accent-[var(--color-vino-600)]" /></label>

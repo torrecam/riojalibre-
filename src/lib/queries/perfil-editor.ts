@@ -25,8 +25,8 @@ export async function datosEditor(uid: string) {
     plantilla: perfil?.plantilla ?? null,
     clasificacion: perfil?.clasificacion ?? "",
     plazo_preparacion_dias: perfil?.plazo_preparacion_dias ?? 10,
-    alertas_email: perfil?.alertas_email ?? false,
-    alertas_frecuencia: perfil?.alertas_frecuencia ?? "semanal",
+    alertas_email: perfil?.alertas_email ?? true,
+    alertas_frecuencia: perfil?.alertas_frecuencia ?? "diaria",
     alertas_umbral: perfil?.alertas_umbral ?? 60,
     cpvs: cpvs.map((c) => ({ codigo: c.codigo, descripcion: c.descripcion })),
   };
