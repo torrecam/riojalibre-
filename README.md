@@ -133,7 +133,15 @@ No hace falta Vercel Cron: la ingesta va en GitHub Actions porque las funciones 
 - **Estados normalizados**: Anuncio previo, En plazo, Pendiente de adjudicación, Adjudicada, Resuelta y Anulada (se guarda siempre el valor original).
 - **Empresas** agrupadas por NIF; sin NIF, por nombre exacto. Las personas físicas de la BDNS llegan seudonimizadas y no se enlazan a perfiles.
 - **Duplicados opd-179 ↔ PLACE**: mismo número de expediente → la ficha enlaza ambas fuentes.
-- Pendiente: panel `/admin` con Supabase Auth para relanzar cargas (hoy se hace desde GitHub Actions y el estado se ve en `/actualizaciones`), altos cargos y ayuntamientos (las tablas existen, falta conector: las fuentes no publican un fichero estable).
+- **Feed de PLACE**: la primera página pesa ~1 MB, pero las siguientes (`rel="next"`) pesan 14-17 MB y tardan ~40 s cada una. Úsalo solo para el incremental (últimos días); para el histórico usa los ZIP mensuales (`place-zip`). El ETL guarda cada 20 páginas y reintenta descargas completas con timeout de 10 min.
+
+## Pendiente
+
+- Histórico de PLACE: en la base local de pruebas solo se cargaron octubre de 2026 (ZIP) y el feed del 9 al 18 de noviembre de 2026; agosto/septiembre fallaron por cortes de red (`ETIMEDOUT`) y no se reintentaron. En Supabase, lanza `place-zip --desde-mes 202401 --hasta-mes 202610 --borrar` desde Actions.
+- Panel `/admin` con Supabase Auth para relanzar cargas (hoy se hace desde GitHub Actions y el estado se ve en `/actualizaciones`).
+- Conectores de altos cargos y cargos municipales/ayuntamientos (las tablas existen; las fuentes no publican un fichero estable).
+- Las rutas inexistentes muestran la página «No encontrado», pero con código HTTP 200 en vez de 404 (efecto del streaming de Next.js).
+- Las cargas de menores y BDNS comparten tablas: no lances varias cargas a la vez contra la misma base (el workflow ya usa `concurrency`).
 
 ## Licencia de los datos
 
