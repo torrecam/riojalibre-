@@ -1,0 +1,51 @@
+name: Ingesta de datos
+
+on:
+  schedule:
+    # Todos los días a las 05:15 UTC (06:15 en invierno / 07:15 en verano, hora peninsular)
+    - cron: "15 5 * * *"
+  workflow_dispatch:
+    inputs:
+      modo:
+        description: "Qué ejecutar"
+        type: choice
+        default: diario
+        options: [diario, inicial, migrar, opd179, menores, bdns, place-feed, place-zip, derivados]
+      argumentos:
+        description: "Argumentos extra (p. ej. --desde-mes 202301 --hasta-mes 202312 --borrar)"
+        type: string
+        default: ""
+
+concurrency:
+  group: ingesta
+  cancel-in-progress: false
+
+jobs:
+  ingesta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 340
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BDNS_REGIONES: ${{ vars.BDNS_REGIONES || '20' }}
+      PLACE_DESDE_MES: ${{ vars.PLACE_DESDE_MES || '202401' }}
+      ETL_CACHE_DIR: ${{ runner.temp }}/rioja-datos
+      MODO: ${{ inputs.modo || 'diario' }}
+      ARGUMENTOS: ${{ inputs.argumentos || '' }}
+      SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Ejecutar ETL
+        run: |
+          echo "Modo: $MODO $ARGUMENTOS"
+          # shellcheck disable=SC2086
+          npm run etl -- "$MODO" $ARGUMENTOS
+      - name: Refrescar caché de la web
+        if: always() && env.SITE_URL != ''
+        env:
+          REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
+        run: curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" "$SITE_URL/api/revalidar" || true
