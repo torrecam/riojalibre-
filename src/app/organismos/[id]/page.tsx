@@ -1,3 +1,4 @@
+import { Euro, FileSearch, Gavel, PieChart, Receipt, TrendingUp, Trophy } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -27,27 +28,27 @@ export default async function FichaOrganismo({ params }: { params: Promise<{ id:
       />
       <Contenedor className="space-y-6 py-6">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Kpi etiqueta="Total adjudicado" valor={eurosCompacto(o.importe_adjudicado)} />
-          <Kpi etiqueta="Adjudicaciones" valor={numero(o.adjudicaciones)} />
-          <Kpi etiqueta="Licitaciones" valor={numero(o.licitaciones)} detalle={`Presupuesto: ${eurosCompacto(o.presupuesto)}`} />
-          <Kpi etiqueta="Contratos menores" valor={numero(o.menores)} detalle={o.menores ? eurosCompacto(o.importe_menores) : undefined} href={o.menores ? `/contratos-menores?departamento=${encodeURIComponent(o.nombre)}` : undefined} />
+          <Kpi etiqueta="Adjudicado" icono={<Euro />} valor={eurosCompacto(o.importe_adjudicado)} />
+          <Kpi etiqueta="Adjudicaciones" icono={<Gavel />} valor={numero(o.adjudicaciones)} />
+          <Kpi etiqueta="Licitaciones" icono={<FileSearch />} valor={numero(o.licitaciones)} detalle={`Presupuesto: ${eurosCompacto(o.presupuesto)}`} />
+          <Kpi etiqueta="Menores" icono={<Receipt />} valor={numero(o.menores)} detalle={o.menores ? eurosCompacto(o.importe_menores) : undefined} href={o.menores ? `/contratos-menores?departamento=${encodeURIComponent(o.nombre)}` : undefined} />
         </div>
         <div className="grid gap-6 lg:grid-cols-2">
-          <Seccion titulo="A quién adjudica (top 20 por importe)">
+          <Seccion titulo="A quién adjudica · top 20" icono={<Trophy />}>
             <div className="p-5">
               {top.length ? <BarrasH formato="euros" datos={top.map((t) => ({ etiqueta: t.nombre, valor: t.importe, href: t.empresa_id ? (t.nif ? `/empresas/${encodeURIComponent(t.nif)}` : `/empresas/${t.empresa_id}`) : undefined, extra: `${t.n}` }))} /> : <p className="text-sm text-stone-500">Sin adjudicaciones registradas.</p>}
             </div>
           </Seccion>
           <div className="space-y-6">
-            <Seccion titulo="Por año">
+            <Seccion titulo="Por año" icono={<TrendingUp />}>
               <div className="p-5"><ColumnasLinea datos={anual.map((a) => ({ x: a.anio, barras: a.n, linea: a.importe }))} etiquetaBarras="Adjudicaciones" etiquetaLinea="Importe" /></div>
             </Seccion>
-            <Seccion titulo="Para qué (tipo de contrato)">
+            <Seccion titulo="Por tipo" icono={<PieChart />}>
               <div className="p-5"><Donut datos={tipos.map((t) => ({ etiqueta: `${t.tipo} · ${eurosCompacto(t.importe)}`, valor: t.n }))} /></div>
             </Seccion>
           </div>
         </div>
-        <Seccion titulo="Últimas adjudicaciones">
+        <Seccion titulo="Últimas adjudicaciones" icono={<Gavel />}>
           <div className="overflow-x-auto">
             <table className="tabla">
               <thead><tr><th>Objeto</th><th>Empresa</th><th>Fecha</th><th className="num">Importe</th></tr></thead>

@@ -1,3 +1,4 @@
+import { HandCoins, Layers } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -29,7 +30,7 @@ export default async function FichaSubvencion({ params }: { params: Promise<{ id
         acciones={<div className="flex flex-col items-end gap-1"><EnlaceExterno href={urlBdns}>Ver convocatoria en la BDNS</EnlaceExterno>{urlBases && <EnlaceExterno href={urlBases}>Bases reguladoras</EnlaceExterno>}</div>}
       />
       <Contenedor className="grid gap-6 py-6 lg:grid-cols-3">
-        <Seccion titulo="Datos de la concesión" className="lg:col-span-2">
+        <Seccion titulo="Concesión" icono={<HandCoins />} className="lg:col-span-2">
           <dl className="divide-y divide-stone-100 px-5">
             <Dato etiqueta="Importe concedido"><span className="text-lg font-semibold">{euros(s.importe, true)}</span></Dato>
             {s.ayuda_equivalente !== null && s.ayuda_equivalente !== s.importe && <Dato etiqueta="Ayuda equivalente">{euros(s.ayuda_equivalente, true)}</Dato>}
@@ -51,9 +52,9 @@ export default async function FichaSubvencion({ params }: { params: Promise<{ id
             <Dato etiqueta="Registrada en la BDNS">{fecha(s.fecha_alta)}</Dato>
           </dl>
         </Seccion>
-        <Seccion titulo="Otras concesiones de la convocatoria">
+        <Seccion titulo="Misma convocatoria" icono={<Layers />}>
           {otras.length === 0 ? (
-            <p className="px-5 py-4 text-sm text-stone-500">No hay más concesiones de esta convocatoria en La Rioja.</p>
+            <p className="px-5 py-4 text-sm text-stone-500">No hay más en La Rioja.</p>
           ) : (
             <ul className="divide-y divide-stone-100">
               {otras.map((o) => (

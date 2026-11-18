@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Download, Receipt } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Contenedor, Etiqueta, Paginacion, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -19,8 +20,9 @@ export default async function Menores({ searchParams }: { searchParams: Promise<
     <>
       <Cabecera
         titulo="Contratos menores"
-        subtitulo="Contratos menores del Gobierno de La Rioja según la ejecución presupuestaria publicada por la Intervención General (desde 2021, importes desde 500 €)."
-        acciones={<a className="btn-secundario" href={`/api/contratos-menores/csv${qs(sp, { pagina: undefined })}`}>⬇ Exportar CSV</a>}
+        icono={<Receipt />}
+        subtitulo="Gobierno de La Rioja · desde 2021 · desde 500 €"
+        acciones={<a className="btn-secundario" href={`/api/contratos-menores/csv${qs(sp, { pagina: undefined })}`}><Download className="h-4 w-4" /> CSV</a>}
       />
       <Contenedor className="py-6">
         <form className="card mb-4 grid gap-3 p-4 md:grid-cols-6 md:items-end" action="/contratos-menores">

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { Cabecera, Contenedor, Dato, EnlaceExterno, Estado, Fuente, Seccion } from "@/components/ui";
-import { euros, fecha, fechaHora } from "@/lib/format";
+import { CalendarClock, ClipboardList, Euro, Gavel, Layers, Tags, Users } from "lucide-react";
+import { Cabecera, Contenedor, Dato, EnlaceExterno, Estado, Fuente, Kpi, Seccion } from "@/components/ui";
+import { euros, eurosCompacto, fecha, fechaHora, numero } from "@/lib/format";
 import { licitacion } from "@/lib/queries/licitaciones";
 
 export const dynamic = "force-dynamic";
@@ -23,7 +24,7 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
     <>
       <Cabecera
         migas={[{ href: "/licitaciones", label: "Licitaciones" }]}
-        titulo={l.objeto}
+        titulo={<span className="block text-2xl leading-tight sm:text-3xl">{l.objeto}</span>}
         subtitulo={
           <div className="flex flex-wrap items-center gap-3">
             <Estado v={l.estado} />
@@ -38,9 +39,15 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
           </div>
         }
       />
+      <Contenedor className="grid grid-cols-2 gap-3 pt-6 lg:grid-cols-4">
+        <Kpi etiqueta="Presupuesto" icono={<Euro />} valor={eurosCompacto(l.presupuesto_base)} detalle="sin IVA" />
+        <Kpi etiqueta="Adjudicado" icono={<Gavel />} valor={totalAdj ? eurosCompacto(totalAdj) : "—"} detalle={totalAdj && l.presupuesto_base && totalAdj <= l.presupuesto_base ? `${Math.round((1 - totalAdj / l.presupuesto_base) * 100)} % de baja` : `${adjudicaciones.length} adjudicaciones`} />
+        <Kpi etiqueta="Ofertas" icono={<Users />} valor={l.num_licitadores !== null ? numero(l.num_licitadores) : "—"} />
+        <Kpi etiqueta={l.fecha_fin_ofertas ? "Fin de ofertas" : "Publicada"} icono={<CalendarClock />} valor={<span className="text-xl sm:text-2xl">{fecha(l.fecha_fin_ofertas ?? l.fecha_publicacion)}</span>} detalle={duracion ?? undefined} />
+      </Contenedor>
       <Contenedor className="grid gap-6 py-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Seccion titulo="Datos del expediente">
+          <Seccion titulo="Expediente" icono={<ClipboardList />}>
             <dl className="divide-y divide-stone-100 px-5">
               <Dato etiqueta="Nº de expediente"><span className="font-mono">{l.codigo_expediente ?? "—"}</span></Dato>
               <Dato etiqueta="Organismo">{l.organismo_id ? <Link className="enlace" href={`/organismos/${l.organismo_id}`}>{l.organismo}</Link> : "—"}</Dato>
@@ -63,9 +70,9 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
             </dl>
           </Seccion>
 
-          <Seccion titulo={`Adjudicaciones (${adjudicaciones.length})`} accion={totalAdj ? <span className="text-sm font-semibold tabular-nums">{euros(totalAdj)}</span> : null}>
+          <Seccion icono={<Gavel />} titulo={`Adjudicaciones (${adjudicaciones.length})`} accion={totalAdj ? <span className="text-sm font-semibold tabular-nums">{euros(totalAdj)}</span> : null}>
             {adjudicaciones.length === 0 ? (
-              <p className="px-5 py-6 text-sm text-stone-500">Todavía no consta ninguna adjudicación en la fuente.</p>
+              <p className="px-5 py-6 text-sm text-stone-500">Aún sin adjudicar.</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="tabla">
@@ -92,16 +99,16 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
           </Seccion>
 
           {l.criterios_valoracion && (
-            <Seccion titulo="Criterios de valoración">
+            <Seccion titulo="Criterios de valoración" icono={<Layers />}>
               <p className="px-5 py-4 text-sm whitespace-pre-line text-stone-700">{l.criterios_valoracion}</p>
             </Seccion>
           )}
         </div>
 
         <div className="space-y-6">
-          <Seccion titulo="Códigos CPV">
+          <Seccion titulo="CPV" icono={<Tags />}>
             {cpvs.length === 0 ? (
-              <p className="px-5 py-4 text-sm text-stone-500">Sin códigos CPV en la fuente.</p>
+              <p className="px-5 py-4 text-sm text-stone-500">Sin CPV.</p>
             ) : (
               <ul className="divide-y divide-stone-100">
                 {cpvs.map((c) => (
@@ -114,7 +121,7 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
             )}
           </Seccion>
           {relacionadas.length > 0 && (
-            <Seccion titulo="Más del mismo organismo">
+            <Seccion titulo="Del mismo organismo" icono={<ClipboardList />}>
               <ul className="divide-y divide-stone-100">
                 {relacionadas.map((r) => (
                   <li key={r.id} className="px-5 py-3">
@@ -126,7 +133,7 @@ export default async function FichaLicitacion({ params }: { params: Promise<{ id
             </Seccion>
           )}
           <p className="px-1 text-xs text-stone-500">
-            Información reproducida de la fuente oficial. Si detectas un error, prevalece siempre el expediente publicado por el órgano de contratación.
+            Copia de la fuente oficial: ante dudas, manda el expediente.
           </p>
         </div>
       </Contenedor>

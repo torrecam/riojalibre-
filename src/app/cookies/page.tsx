@@ -14,6 +14,10 @@ export default function Cookies() {
             banner de consentimiento.
           </p>
           <p>
+            Si eliges el modo claro u oscuro, esa preferencia se guarda solo en tu navegador (almacenamiento local), no se envía a ningún servidor y es
+            estrictamente técnica.
+          </p>
+          <p>
             Si en el futuro se habilita un acceso de administración, este usará únicamente cookies técnicas de sesión, estrictamente necesarias y exentas de
             consentimiento según el artículo 22.2 de la LSSI.
           </p>

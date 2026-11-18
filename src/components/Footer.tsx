@@ -1,53 +1,77 @@
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { Logo } from "./Logo";
+
+const EXPLORAR = [
+  ["/licitaciones", "Licitaciones"],
+  ["/adjudicaciones", "Adjudicaciones"],
+  ["/contratos-menores", "Contratos menores"],
+  ["/subvenciones", "Subvenciones"],
+  ["/empresas", "Empresas"],
+  ["/organismos", "Organismos"],
+];
+const PROYECTO = [
+  ["/metodologia", "Metodología"],
+  ["/actualizaciones", "Estado de las cargas"],
+  ["/creditos", "Créditos de imágenes"],
+  ["/aviso-legal", "Aviso legal"],
+  ["/privacidad", "Privacidad"],
+  ["/cookies", "Cookies"],
+];
+const FUENTES = [
+  ["https://web.larioja.org/dato-abierto/datoabierto?n=opd-179", "Dato abierto La Rioja"],
+  ["https://contrataciondelestado.es", "PLACE"],
+  ["https://www.larioja.org/contratacion-publica/es", "Contratación La Rioja"],
+  ["https://www.infosubvenciones.es/", "BDNS"],
+];
 
 export function Footer() {
   return (
-    <footer className="mt-16 border-t border-stone-200 bg-white">
-      <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 text-sm sm:px-6 md:grid-cols-4">
-        <div className="md:col-span-1">
-          <div className="flex items-center gap-2">
-            <Logo className="h-7 w-7" />
-            <span className="font-[family-name:var(--font-display)] text-base font-semibold">Rioja Abierta</span>
+    <footer className="relative mt-20 overflow-hidden border-t border-stone-200 bg-surface">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-vino-400 to-transparent" />
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 text-sm sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <Logo className="h-9 w-9" />
+            <span className="font-[family-name:var(--font-display)] text-lg font-extrabold tracking-tight">
+              Rioja<span className="text-vino-700">Abierta</span>
+            </span>
           </div>
-          <p className="mt-3 text-stone-500">
-            Iniciativa ciudadana independiente, sin vínculo con ninguna administración. Los datos proceden de fuentes oficiales públicas; ante cualquier
-            discrepancia, prevalece la fuente original.
-          </p>
+          <p className="mt-4 max-w-xs text-stone-500">Iniciativa ciudadana e independiente. Ante cualquier duda, manda la fuente oficial.</p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <span className="chip bg-vid-50 text-vid-700">CC BY 4.0</span>
+            <span className="chip bg-vino-50 text-vino-700">Sin cookies de rastreo</span>
+          </div>
         </div>
+        {[
+          ["Explorar", EXPLORAR],
+          ["Proyecto", PROYECTO],
+        ].map(([t, items]) => (
+          <div key={t as string}>
+            <h3 className="text-xs font-semibold tracking-wider text-stone-400 uppercase">{t as string}</h3>
+            <ul className="mt-3 space-y-2">
+              {(items as string[][]).map(([h, l]) => (
+                <li key={h}><Link className="text-stone-600 transition hover:text-vino-700" href={h}>{l}</Link></li>
+              ))}
+            </ul>
+          </div>
+        ))}
         <div>
-          <h3 className="font-semibold text-stone-900">Explorar</h3>
-          <ul className="mt-3 space-y-2 text-stone-600">
-            <li><Link className="hover:text-vino-700" href="/licitaciones">Licitaciones</Link></li>
-            <li><Link className="hover:text-vino-700" href="/adjudicaciones">Adjudicaciones</Link></li>
-            <li><Link className="hover:text-vino-700" href="/contratos-menores">Contratos menores</Link></li>
-            <li><Link className="hover:text-vino-700" href="/subvenciones">Subvenciones</Link></li>
-            <li><Link className="hover:text-vino-700" href="/empresas">Empresas</Link></li>
-            <li><Link className="hover:text-vino-700" href="/organismos">Organismos</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="font-semibold text-stone-900">Proyecto</h3>
-          <ul className="mt-3 space-y-2 text-stone-600">
-            <li><Link className="hover:text-vino-700" href="/metodologia">Fuentes y metodología</Link></li>
-            <li><Link className="hover:text-vino-700" href="/actualizaciones">Estado de las cargas</Link></li>
-            <li><Link className="hover:text-vino-700" href="/aviso-legal">Aviso legal</Link></li>
-            <li><Link className="hover:text-vino-700" href="/privacidad">Privacidad</Link></li>
-            <li><Link className="hover:text-vino-700" href="/cookies">Cookies</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h3 className="font-semibold text-stone-900">Fuentes oficiales</h3>
-          <ul className="mt-3 space-y-2 text-stone-600">
-            <li><a className="hover:text-vino-700" href="https://web.larioja.org/dato-abierto/datoabierto?n=opd-179" target="_blank" rel="noreferrer">Dato abierto La Rioja (opd-179)</a></li>
-            <li><a className="hover:text-vino-700" href="https://contrataciondelestado.es" target="_blank" rel="noreferrer">Plataforma de Contratación del Sector Público</a></li>
-            <li><a className="hover:text-vino-700" href="https://www.larioja.org/contratacion-publica/es" target="_blank" rel="noreferrer">Contratación pública de La Rioja</a></li>
-            <li><a className="hover:text-vino-700" href="https://www.infosubvenciones.es/" target="_blank" rel="noreferrer">BDNS · Infosubvenciones</a></li>
+          <h3 className="text-xs font-semibold tracking-wider text-stone-400 uppercase">Fuentes</h3>
+          <ul className="mt-3 space-y-2">
+            {FUENTES.map(([h, l]) => (
+              <li key={h}>
+                <a className="group inline-flex items-center gap-1 text-stone-600 transition hover:text-vino-700" href={h} target="_blank" rel="noreferrer">
+                  {l}
+                  <ArrowUpRight className="h-3.5 w-3.5 opacity-50 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
       </div>
-      <div className="border-t border-stone-100 py-4 text-center text-xs text-stone-400">
-        Datos reutilizados bajo licencia CC BY 4.0 y Ley 37/2007 · Código abierto
+      <div className="border-t border-stone-100 py-5 text-center text-xs text-stone-400">
+        Datos reutilizados bajo CC BY 4.0 y Ley 37/2007 · Fotos: Wikimedia Commons (<Link href="/creditos" className="underline-offset-2 hover:underline">créditos</Link>) · Código abierto
       </div>
     </footer>
   );

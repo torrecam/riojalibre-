@@ -21,7 +21,7 @@ export function BarrasH({ datos, formato = "numero", max }: { datos: { etiqueta:
             </span>
           </div>
           <div className="mt-1 h-2 overflow-hidden rounded-full bg-stone-100">
-            <div className="h-full rounded-full bg-vino-600" style={{ width: `${Math.max(0.5, (d.valor / m) * 100)}%` }} />
+            <div className="h-full rounded-full bg-gradient-to-r from-vino-400 to-vino-700 transition-[width] duration-700" style={{ width: `${Math.max(0.5, (d.valor / m) * 100)}%` }} />
           </div>
         </li>
       ))}
@@ -56,7 +56,7 @@ export function ColumnasLinea({ datos, etiquetaBarras = "Nº", etiquetaLinea = "
           const h = (d.barras / maxB) * ih;
           return (
             <g key={String(d.x)}>
-              <rect x={pad.l + bw * i + bw * 0.15} y={pad.t + ih - h} width={bw * 0.7} height={h} rx={3} className="fill-vino-200">
+              <rect x={pad.l + bw * i + bw * 0.15} y={pad.t + ih - h} width={bw * 0.7} height={h} rx={3} className="fill-vino-300/70 transition-colors hover:fill-vino-500">
                 <title>{`${d.x}: ${numero(d.barras)} · ${eurosCompacto(d.linea)}`}</title>
               </rect>
               <text x={pad.l + bw * i + bw / 2} y={H - 8} textAnchor="middle" className="fill-stone-500 text-[10px]">

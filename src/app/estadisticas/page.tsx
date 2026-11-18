@@ -1,4 +1,6 @@
+import { Building2, Euro, FileSearch, Gavel, HandCoins, Layers, PieChart, Receipt, Scale, TrendingUp, Trophy } from "lucide-react";
 import type { Metadata } from "next";
+import { BarChart3 } from "lucide-react";
 import { BarrasH, ColumnasLinea, Donut } from "@/components/graficos";
 import { Cabecera, Conmutador, Contenedor, Kpi, Seccion, SinBD } from "@/components/ui";
 import Link from "next/link";
@@ -20,37 +22,37 @@ export default async function Estadisticas({ searchParams }: { searchParams: Pro
   const opc = [{ v: "n", label: "Nº" }, { v: "eur", label: "€" }];
   return (
     <>
-      <Cabecera titulo="Estadísticas" subtitulo="Una vista de conjunto de la contratación y las ayudas públicas en La Rioja con los datos cargados." />
+      <Cabecera titulo="Estadísticas" icono={<BarChart3 />} subtitulo="La contratación y las ayudas de La Rioja, de un vistazo" />
       <Contenedor className="space-y-6 py-6">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Kpi etiqueta="Licitaciones" valor={numero(k.licitaciones)} />
-          <Kpi etiqueta="Presupuesto total" valor={eurosCompacto(k.presupuesto)} />
-          <Kpi etiqueta="Adjudicadas o resueltas" valor={numero(k.adjudicadas)} detalle={`${Math.round((k.adjudicadas / Math.max(1, k.licitaciones)) * 100)} % del total`} />
-          <Kpi etiqueta="Presupuesto medio" valor={euros(k.presupuesto_medio)} />
+          <Kpi etiqueta="Licitaciones" icono={<FileSearch />} valor={numero(k.licitaciones)} />
+          <Kpi etiqueta="Presupuesto total" icono={<Euro />} valor={eurosCompacto(k.presupuesto)} />
+          <Kpi etiqueta="Adjudicadas" icono={<Gavel />} valor={numero(k.adjudicadas)} detalle={`${Math.round((k.adjudicadas / Math.max(1, k.licitaciones)) * 100)} % del total`} />
+          <Kpi etiqueta="Medio" icono={<Scale />} valor={euros(k.presupuesto_medio)} />
         </div>
 
-        <Seccion titulo="Licitaciones y presupuesto por año de publicación">
+        <Seccion titulo="Licitaciones y presupuesto por año" icono={<TrendingUp />}>
           <div className="p-5"><ColumnasLinea datos={s.anual.map((a) => ({ x: a.anio, barras: a.n, linea: a.presupuesto }))} etiquetaBarras="Nº de licitaciones" etiquetaLinea="Presupuesto base" /></div>
         </Seccion>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Seccion titulo="Por tipo de contrato" accion={<Conmutador sp={sp} base="/estadisticas" param="tipo" actual={mTipo} opciones={opc} />}>
+          <Seccion titulo="Por tipo" icono={<Layers />} accion={<Conmutador sp={sp} base="/estadisticas" param="tipo" actual={mTipo} opciones={opc} />}>
             <div className="p-5">
               <BarrasH formato={mTipo === "eur" ? "euros" : "numero"} datos={[...s.tipos].sort((a, b) => (mTipo === "eur" ? b.importe - a.importe : b.n - a.n)).map((t) => ({ etiqueta: t.v, valor: mTipo === "eur" ? t.importe : t.n, href: t.v !== "Sin tipo" ? `/licitaciones?tipo=${encodeURIComponent(t.v)}` : undefined }))} />
             </div>
           </Seccion>
-          <Seccion titulo="Por estado">
+          <Seccion titulo="Por estado" icono={<PieChart />}>
             <div className="p-5"><Donut datos={s.estados.map((e) => ({ etiqueta: e.v, valor: e.n }))} /></div>
           </Seccion>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Seccion titulo="Top organismos contratantes" accion={<Conmutador sp={sp} base="/estadisticas" param="org" actual={mOrg} opciones={opc} />}>
+          <Seccion titulo="Top organismos" icono={<Building2 />} accion={<Conmutador sp={sp} base="/estadisticas" param="org" actual={mOrg} opciones={opc} />}>
             <div className="p-5">
               <BarrasH formato={mOrg === "eur" ? "euros" : "numero"} datos={orgs.map((o) => ({ etiqueta: o.nombre, valor: mOrg === "eur" ? o.importe : o.n, href: `/organismos/${o.id}` }))} />
             </div>
           </Seccion>
-          <Seccion titulo="Top empresas adjudicatarias" accion={<Link href="/empresas" className="text-sm enlace">Ranking completo</Link>}>
+          <Seccion titulo="Top empresas" icono={<Trophy />} accion={<Link href="/empresas" className="text-sm enlace">Ver todo</Link>}>
             <div className="overflow-x-auto">
               <table className="tabla">
                 <thead><tr><th>#</th><th>Empresa</th><th className="num">Contratos</th><th className="num">Importe</th></tr></thead>
@@ -70,15 +72,15 @@ export default async function Estadisticas({ searchParams }: { searchParams: Pro
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Seccion titulo="Contratos menores por año">
+          <Seccion titulo="Contratos menores por año" icono={<Receipt />}>
             <div className="p-5"><ColumnasLinea datos={s.menoresAnual.map((a) => ({ x: a.anio, barras: a.n, linea: a.importe }))} etiquetaBarras="Nº de contratos menores" etiquetaLinea="Importe" /></div>
           </Seccion>
-          <Seccion titulo="Subvenciones por año de concesión">
+          <Seccion titulo="Subvenciones por año" icono={<HandCoins />}>
             <div className="p-5"><ColumnasLinea datos={s.subvAnual.map((a) => ({ x: a.anio, barras: a.n, linea: a.importe }))} etiquetaBarras="Nº de concesiones" etiquetaLinea="Importe concedido" /></div>
           </Seccion>
         </div>
         <p className="text-xs text-stone-500">
-          Licitaciones por fuente: {s.fuentes.map((f) => `${f.v === "place" ? "PLACE" : f.v} ${numero(f.n)}`).join(" · ")}. Los importes de licitación son presupuestos base sin IVA.
+          Licitaciones por fuente: {s.fuentes.map((f) => `${f.v === "place" ? "PLACE" : f.v} ${numero(f.n)}`).join(" · ")}. Importes sin IVA.
         </p>
       </Contenedor>
     </>

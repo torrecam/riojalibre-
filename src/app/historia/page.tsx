@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { History } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Contenedor, Estado, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -18,7 +19,7 @@ export default async function Historia({ searchParams }: { searchParams: Promise
   const total = filas.reduce((a, f) => a + (f.importe ?? 0), 0);
   return (
     <>
-      <Cabecera titulo="Historial por adjudicatario" subtitulo="Cronología de adjudicaciones por denominación exacta, tal como figura en la fuente. Útil cuando la empresa no tiene NIF publicado." />
+      <Cabecera titulo="Historial por adjudicatario" icono={<History />} subtitulo="Cronología por nombre exacto, útil sin NIF" />
       <Contenedor className="py-6">
         <form className="card mb-4 flex gap-2 p-4" action="/historia">
           <input className="input" name="q" placeholder="Escribe parte del nombre…" defaultValue={q ?? empresa} aria-label="Nombre del adjudicatario" />

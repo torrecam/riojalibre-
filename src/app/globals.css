@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-vino-50: #fbf3f5;
   --color-vino-100: #f6e4e9;
@@ -11,63 +13,176 @@
   --color-vino-700: #772541;
   --color-vino-800: #632139;
   --color-vino-900: #521d31;
+  --color-vino-950: #2e0f1b;
   --color-vid-50: #f3f7ef;
   --color-vid-100: #e3edd9;
+  --color-vid-300: #a3c47a;
+  --color-vid-400: #7fa957;
   --color-vid-500: #5d8a3c;
   --color-vid-600: #48702d;
   --color-vid-700: #385726;
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
-  --font-display: ui-serif, Georgia, Cambria, "Times New Roman", serif;
+  --color-surface: #ffffff;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-jakarta), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --animate-entrar: entrar 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-flotar: flotar 7s ease-in-out infinite;
+  --animate-zoom-lento: zoom-lento 24s ease-out both;
+  --animate-brillo: brillo 3s linear infinite;
+
+  @keyframes entrar {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes flotar {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(0, -14px, 0) scale(1.04); }
+  }
+  @keyframes zoom-lento {
+    from { transform: scale(1.12); }
+    to { transform: scale(1); }
+  }
+  @keyframes brillo {
+    to { background-position: 200% center; }
+  }
 }
 
 :root {
   color-scheme: light;
 }
 
+/* Modo oscuro: se reasigna la escala neutra y los tonos claros de marca, así todas las páginas lo heredan */
+.dark {
+  color-scheme: dark;
+  --color-surface: #171412;
+  --color-stone-50: #0d0b0a;
+  --color-stone-100: #1f1b19;
+  --color-stone-200: #2c2724;
+  --color-stone-300: #45403c;
+  --color-stone-400: #7d756f;
+  --color-stone-500: #a39b95;
+  --color-stone-600: #cfc8c2;
+  --color-stone-700: #e2ddd8;
+  --color-stone-800: #f0ece9;
+  --color-stone-900: #f8f6f4;
+  --color-stone-950: #ffffff;
+  --color-vino-50: #2a1119;
+  --color-vino-100: #3a1724;
+  --color-vino-200: #5b2539;
+  --color-vino-300: #87405a;
+  --color-vino-500: #b84f73;
+  --color-vino-600: #c45a7d;
+  --color-vino-700: #cf6a8c;
+  --color-vino-800: #d9799a;
+  --color-vino-900: #eda3bb;
+  --color-vid-50: #17200f;
+  --color-vid-100: #213019;
+  --color-vid-700: #9cc472;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-stone-50 text-stone-900 antialiased;
 }
 
+/* Fondo con resplandor suave */
+.fondo-aurora {
+  background:
+    radial-gradient(60rem 30rem at 10% -10%, color-mix(in oklab, var(--color-vino-300) 22%, transparent), transparent 70%),
+    radial-gradient(50rem 26rem at 95% 0%, color-mix(in oklab, var(--color-vid-300) 22%, transparent), transparent 70%);
+}
+.dark .fondo-aurora {
+  background:
+    radial-gradient(60rem 30rem at 10% -10%, rgb(119 37 65 / 0.35), transparent 70%),
+    radial-gradient(50rem 26rem at 95% 0%, rgb(72 112 45 / 0.22), transparent 70%);
+}
+.texto-gradiente {
+  @apply bg-gradient-to-r from-[#f7c6d4] via-white to-[#cbe5a8] bg-clip-text text-transparent;
+  background-size: 200% auto;
+  animation: var(--animate-brillo);
+}
+.punteado {
+  background-image: radial-gradient(currentColor 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+/* Aparición al hacer scroll (sin JS, con degradado elegante si el navegador no lo soporta) */
+@media (prefers-reduced-motion: no-preference) {
+@supports (animation-timeline: view()) {
+  .revelar {
+    animation: entrar linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 22%;
+  }
+}
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Utilidades propias */
 @utility card {
-  @apply rounded-2xl border border-stone-200 bg-white shadow-[0_1px_2px_rgba(0,0,0,0.04)];
+  @apply rounded-2xl border border-stone-200/80 bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.04),0_8px_24px_-12px_rgba(82,29,49,0.12)] dark:shadow-none;
+}
+@utility card-hover {
+  @apply transition duration-300 hover:-translate-y-0.5 hover:border-vino-200 hover:shadow-[0_18px_40px_-18px_rgba(119,37,65,0.35)];
+}
+@utility glass {
+  @apply border border-white/20 bg-white/10 backdrop-blur-xl;
 }
 @utility input {
-  @apply w-full rounded-lg border border-stone-300 bg-white px-3 py-2 text-sm text-stone-900 placeholder:text-stone-400 focus:border-vino-500 focus:ring-2 focus:ring-vino-200 focus:outline-none;
+  @apply w-full rounded-xl border border-stone-200 bg-surface px-3 py-2.5 text-sm text-stone-900 transition placeholder:text-stone-400 focus:border-vino-500 focus:ring-4 focus:ring-vino-500/15 focus:outline-none;
 }
 @utility label {
-  @apply mb-1 block text-xs font-medium tracking-wide text-stone-500 uppercase;
+  @apply mb-1.5 block text-[11px] font-semibold tracking-wider text-stone-500 uppercase;
 }
 @utility btn {
-  @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition duration-200 active:scale-[0.98];
 }
 @utility btn-primario {
-  @apply btn bg-vino-700 text-white hover:bg-vino-800;
+  @apply btn bg-gradient-to-br from-vino-600 to-vino-800 text-white shadow-[0_8px_20px_-8px_rgba(119,37,65,0.7)] hover:brightness-110 dark:from-vino-500 dark:to-vino-600;
 }
 @utility btn-secundario {
-  @apply btn border border-stone-300 bg-white text-stone-700 hover:bg-stone-100;
+  @apply btn border border-stone-200 bg-surface text-stone-700 hover:border-vino-300 hover:text-vino-700;
 }
 @utility enlace {
-  @apply text-vino-700 underline-offset-2 hover:text-vino-900 hover:underline;
+  @apply font-medium text-vino-700 underline-offset-4 hover:text-vino-900 hover:underline;
+}
+@utility chip {
+  @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium whitespace-nowrap;
 }
 
 .tabla {
   @apply w-full text-left text-sm;
 }
 .tabla thead th {
-  @apply border-b border-stone-200 bg-stone-50 px-4 py-2.5 text-xs font-semibold tracking-wide whitespace-nowrap text-stone-500 uppercase;
+  @apply border-b border-stone-200 bg-stone-50/80 px-4 py-3 text-[11px] font-semibold tracking-wider whitespace-nowrap text-stone-500 uppercase;
 }
 .tabla tbody td {
   @apply border-b border-stone-100 px-4 py-3 align-top;
 }
+.tabla tbody tr {
+  @apply transition-colors;
+}
 .tabla tbody tr:hover {
-  @apply bg-vino-50/40;
+  @apply bg-vino-50/60;
+}
+.tabla tbody tr:last-child td {
+  @apply border-b-0;
 }
 .num {
   @apply text-right whitespace-nowrap tabular-nums;
 }
 .prosa h2 {
-  @apply mt-8 mb-3 text-xl font-semibold text-stone-900;
+  @apply mt-10 mb-3 font-[family-name:var(--font-display)] text-xl font-bold text-stone-900;
 }
 .prosa p,
 .prosa li {

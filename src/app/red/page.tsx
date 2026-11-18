@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Network } from "lucide-react";
 import { Cabecera, Contenedor, SinBD } from "@/components/ui";
 import { Grafo } from "@/components/Grafo";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -20,7 +21,9 @@ export default async function Red({ searchParams }: { searchParams: Promise<SP> 
     <>
       <Cabecera
         titulo="Red de adjudicatarios"
-        subtitulo={`Relaciones entre los ${nOrg} organismos con más importe adjudicado y sus ${nEmp} principales adjudicatarias cada uno: ${organismos} organismos, ${empresas} empresas y ${aristas.length} relaciones.`}
+        icono={<Network />}
+        subtitulo="Quién contrata con quién"
+        chips={<><span className="chip bg-vino-50 text-vino-700">{organismos} organismos</span><span className="chip bg-vid-50 text-vid-700">{empresas} empresas</span><span className="chip bg-stone-100 text-stone-600">{aristas.length} relaciones</span></>}
       />
       <Contenedor className="py-6">
         <form className="mb-4 flex flex-wrap items-end gap-3 text-sm" action="/red">

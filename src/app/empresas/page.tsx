@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Users } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Conmutador, Contenedor, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -18,7 +19,8 @@ export default async function Empresas({ searchParams }: { searchParams: Promise
     <>
       <Cabecera
         titulo="Empresas y entidades"
-        subtitulo="Las 300 principales por importe adjudicado. Se agrupan por NIF cuando la fuente lo publica; si no hay NIF, por nombre exacto."
+        icono={<Users />}
+        subtitulo="Top 300 por importe adjudicado"
       />
       <Contenedor className="py-6">
         <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -66,8 +68,7 @@ export default async function Empresas({ searchParams }: { searchParams: Promise
           </div>
         )}
         <p className="mt-4 text-xs text-stone-500">
-          Limitación: una misma empresa puede aparecer con variantes de razón social cuando la fuente no publica NIF. Las UTE tienen NIF propio y
-          figuran aparte de sus socias.
+          Sin NIF, una empresa puede salir con varios nombres. Las UTE van aparte.
         </p>
       </Contenedor>
     </>

@@ -1,3 +1,4 @@
+import { Building2, Euro, Gavel, HandCoins, Receipt, Tags, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -32,14 +33,14 @@ export default async function FichaEmpresa({ params }: { params: Promise<{ clave
       />
       <Contenedor className="space-y-6 py-6">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <Kpi etiqueta="Contratos adjudicados" valor={numero(e.contratos)} />
-          <Kpi etiqueta="Importe de contratos" valor={eurosCompacto(e.importe_contratos)} />
-          <Kpi etiqueta="Contratos menores" valor={numero(e.menores)} detalle={e.menores ? eurosCompacto(e.importe_menores) : undefined} />
-          <Kpi etiqueta="Subvenciones" valor={numero(e.subvenciones)} detalle={e.subvenciones ? eurosCompacto(e.importe_subvenciones) : undefined} />
+          <Kpi etiqueta="Contratos" icono={<Gavel />} valor={numero(e.contratos)} />
+          <Kpi etiqueta="Importe" icono={<Euro />} valor={eurosCompacto(e.importe_contratos)} />
+          <Kpi etiqueta="Menores" icono={<Receipt />} valor={numero(e.menores)} detalle={e.menores ? eurosCompacto(e.importe_menores) : undefined} />
+          <Kpi etiqueta="Subvenciones" icono={<HandCoins />} valor={numero(e.subvenciones)} detalle={e.subvenciones ? eurosCompacto(e.importe_subvenciones) : undefined} />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
-          <Seccion titulo="Evolución anual (contratos + menores)">
+          <Seccion titulo="Evolución anual" icono={<TrendingUp />}>
             <div className="p-5">
               <ColumnasLinea
                 datos={anual.map((a) => ({ x: a.anio, barras: a.contratos + a.menores, linea: a.importe_contratos + a.importe_menores }))}
@@ -48,7 +49,7 @@ export default async function FichaEmpresa({ params }: { params: Promise<{ clave
               />
             </div>
           </Seccion>
-          <Seccion titulo={`Organismos contratantes (${organismos.length})`}>
+          <Seccion icono={<Building2 />} titulo={`Organismos (${organismos.length})`}>
             <div className="p-5">
               {organismos.length ? (
                 <BarrasH formato="euros" datos={organismos.slice(0, 12).map((o) => ({ etiqueta: o.nombre, valor: o.importe, href: `/organismos/${o.id}`, extra: `${o.n} contr.` }))} />
@@ -60,7 +61,7 @@ export default async function FichaEmpresa({ params }: { params: Promise<{ clave
         </div>
 
         {contratos.length > 0 && (
-          <Seccion titulo={`Contratos adjudicados${contratos.length === 200 ? " (últimos 200)" : ""}`}>
+          <Seccion icono={<Gavel />} titulo={`Contratos${contratos.length === 200 ? " (últimos 200)" : ""}`}>
             <div className="overflow-x-auto">
               <table className="tabla">
                 <thead><tr><th>Objeto</th><th>Organismo</th><th>Fecha</th><th>Tipo</th><th className="num">Importe</th></tr></thead>
@@ -81,7 +82,7 @@ export default async function FichaEmpresa({ params }: { params: Promise<{ clave
         )}
 
         {menores.length > 0 && (
-          <Seccion titulo={`Contratos menores${menores.length === 100 ? " (últimos 100)" : ""}`} accion={<Link className="text-sm enlace" href={`/contratos-menores?q=${encodeURIComponent(e.nif ?? e.nombre)}`}>Ver todos</Link>}>
+          <Seccion icono={<Receipt />} titulo={`Menores${menores.length === 100 ? " (últimos 100)" : ""}`} accion={<Link className="text-sm enlace" href={`/contratos-menores?q=${encodeURIComponent(e.nif ?? e.nombre)}`}>Ver todos</Link>}>
             <div className="overflow-x-auto">
               <table className="tabla">
                 <thead><tr><th>Concepto</th><th>Departamento</th><th>Fecha</th><th className="num">Importe</th></tr></thead>
@@ -101,7 +102,7 @@ export default async function FichaEmpresa({ params }: { params: Promise<{ clave
         )}
 
         {subvenciones.length > 0 && (
-          <Seccion titulo="Subvenciones recibidas">
+          <Seccion titulo="Subvenciones" icono={<HandCoins />}>
             <div className="overflow-x-auto">
               <table className="tabla">
                 <thead><tr><th>Convocatoria</th><th>Concedente</th><th>Fecha</th><th className="num">Importe</th></tr></thead>
@@ -121,7 +122,7 @@ export default async function FichaEmpresa({ params }: { params: Promise<{ clave
         )}
 
         {nombres.length > 1 && (
-          <Seccion titulo="Denominaciones con las que aparece">
+          <Seccion titulo="Otros nombres" icono={<Tags />}>
             <ul className="flex flex-wrap gap-2 p-5 text-sm">
               {nombres.map((n) => (
                 <li key={n.nombre}><Link href={`/historia?empresa=${encodeURIComponent(n.nombre)}`} className="rounded-full bg-stone-100 px-3 py-1 hover:bg-vino-50">{n.nombre} <span className="text-stone-500">({n.n})</span></Link></li>

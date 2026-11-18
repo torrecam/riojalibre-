@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Building2 } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Conmutador, Contenedor, Etiqueta, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -17,7 +18,7 @@ export default async function Organismos({ searchParams }: { searchParams: Promi
   const filas = await listaOrganismos(sp);
   return (
     <>
-      <Cabecera titulo="Organismos contratantes" subtitulo="Consejerías, organismos autónomos, ayuntamientos y órganos estatales con contratos registrados en La Rioja." />
+      <Cabecera titulo="Organismos" icono={<Building2 />} subtitulo="Consejerías, ayuntamientos y órganos estatales" />
       <Contenedor className="py-6">
         <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
           <form action="/organismos" className="flex w-full max-w-lg gap-2">

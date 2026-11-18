@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { RefreshCw } from "lucide-react";
 import { Cabecera, Contenedor, SinBD } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
 import { fechaHora, numero } from "@/lib/format";
@@ -14,7 +15,7 @@ export default async function Actualizaciones() {
   const runs = await ultimasEjecuciones();
   return (
     <>
-      <Cabecera titulo="Estado de las cargas de datos" subtitulo="Últimas ejecuciones del proceso automático de ingesta (GitHub Actions). Horas en horario peninsular español." />
+      <Cabecera titulo="Estado de las cargas" icono={<RefreshCw />} subtitulo="Últimas ingestas automáticas · hora peninsular" />
       <Contenedor className="py-6">
         <div className="card overflow-x-auto">
           <table className="tabla">

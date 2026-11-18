@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Download, Gavel } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Contenedor, Paginacion, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -18,8 +19,9 @@ export default async function Adjudicaciones({ searchParams }: { searchParams: P
     <>
       <Cabecera
         titulo="Adjudicaciones"
-        subtitulo="Cada contrato (o lote) adjudicado, con la empresa, el importe sin IVA y el organismo. Ordenado por fecha de adjudicación."
-        acciones={<a className="btn-secundario" href={`/api/adjudicaciones/csv${qs(sp, { pagina: undefined })}`}>⬇ Exportar CSV</a>}
+        icono={<Gavel />}
+        subtitulo="Cada contrato o lote: empresa, importe sin IVA y organismo"
+        acciones={<a className="btn-secundario" href={`/api/adjudicaciones/csv${qs(sp, { pagina: undefined })}`}><Download className="h-4 w-4" /> CSV</a>}
       />
       <Contenedor className="py-6">
         <form className="card mb-4 grid gap-3 p-4 sm:grid-cols-[1fr_160px_160px_160px_auto] sm:items-end" action="/adjudicaciones">

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { BookOpen } from "lucide-react";
 import { Cabecera, Contenedor } from "@/components/ui";
 
 export const metadata: Metadata = { title: "Fuentes y metodología" };
@@ -6,7 +7,7 @@ export const metadata: Metadata = { title: "Fuentes y metodología" };
 export default function Metodologia() {
   return (
     <>
-      <Cabecera titulo="Fuentes y metodología" subtitulo="De dónde salen los datos, cómo se procesan y qué limitaciones tienen." />
+      <Cabecera titulo="Fuentes y metodología" icono={<BookOpen />} subtitulo="De dónde salen los datos y sus límites" />
       <Contenedor className="py-8">
         <article className="prosa max-w-3xl">
           <h2>Fuentes oficiales</h2>

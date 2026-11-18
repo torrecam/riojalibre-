@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Download, HandCoins } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Contenedor, Etiqueta, Paginacion, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -21,8 +22,9 @@ export default async function Subvenciones({ searchParams }: { searchParams: Pro
     <>
       <Cabecera
         titulo="Subvenciones y ayudas"
-        subtitulo={<>Concesiones con impacto en La Rioja registradas en la <a className="enlace" href="https://www.infosubvenciones.es/" target="_blank" rel="noreferrer">Base de Datos Nacional de Subvenciones</a>, de cualquier administración concedente.</>}
-        acciones={<a className="btn-secundario" href={`/api/subvenciones/csv${qs(sp, { pagina: undefined })}`}>⬇ Exportar CSV</a>}
+        icono={<HandCoins />}
+        subtitulo={<>Ayudas con impacto en La Rioja · fuente <a className="enlace" href="https://www.infosubvenciones.es/" target="_blank" rel="noreferrer">BDNS</a></>}
+        acciones={<a className="btn-secundario" href={`/api/subvenciones/csv${qs(sp, { pagina: undefined })}`}><Download className="h-4 w-4" /> CSV</a>}
       />
       <Contenedor className="py-6">
         <form className="card mb-4 grid gap-3 p-4 md:grid-cols-6 md:items-end" action="/subvenciones">

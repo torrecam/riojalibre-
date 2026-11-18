@@ -83,3 +83,15 @@ export const estadisticas = unstable_cache(
   ["estadisticas"],
   CACHE,
 );
+
+/** Ranking ligero para la portada (lee la vista materializada, sin agregaciones). */
+export const topAdjudicatarios = unstable_cache(
+  async () => {
+    const sql = db();
+    return sql<{ id: string; nombre: string; nif: string | null; contratos: number; importe_contratos: number }[]>`
+      select id, nombre, nif, contratos, importe_contratos::float8 from mv_empresas_totales
+      where importe_contratos > 0 order by importe_contratos desc nulls last limit 6`;
+  },
+  ["top-adjudicatarios"],
+  CACHE,
+);

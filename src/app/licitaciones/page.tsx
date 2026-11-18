@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Download, FileSearch, SlidersHorizontal } from "lucide-react";
 import type { Metadata } from "next";
 import { Cabecera, Contenedor, Estado, Fuente, Paginacion, SinBD, Vacio } from "@/components/ui";
 import { hayBaseDeDatos } from "@/lib/db";
@@ -30,15 +31,16 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
     <>
       <Cabecera
         titulo="Licitaciones"
-        subtitulo="Contratación pública del Gobierno de La Rioja, sus organismos, los ayuntamientos riojanos y los órganos estatales con sede o ejecución en La Rioja."
-        acciones={<a href={csv} className="btn-secundario">⬇ Exportar CSV</a>}
+        icono={<FileSearch />}
+        subtitulo="Gobierno, ayuntamientos y Estado en La Rioja"
+        acciones={<a href={csv} className="btn-secundario"><Download className="h-4 w-4" /> CSV</a>}
       />
       <Contenedor className="py-6">
         <div className="grid gap-6 lg:grid-cols-[300px_1fr]">
           <aside id="filtros" className="order-last lg:order-none">
             <form className="card space-y-4 p-5 lg:sticky lg:top-20" action="/licitaciones">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold">Filtros</h2>
+                <h2 className="flex items-center gap-2 font-[family-name:var(--font-display)] font-bold"><SlidersHorizontal className="h-4 w-4 text-vino-600" /> Filtros</h2>
                 {hayFiltros && <Link href="/licitaciones" className="text-xs enlace">Limpiar</Link>}
               </div>
               <div>
@@ -132,14 +134,14 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
               ))}
               <input className="input" name="q" defaultValue={f.q} placeholder="Buscar licitaciones…" aria-label="Buscar licitaciones" />
               <button className="btn-primario">Buscar</button>
-              <a href="#filtros" className="btn-secundario whitespace-nowrap">Filtros ↓</a>
+              <a href="#filtros" className="btn-secundario whitespace-nowrap"><SlidersHorizontal className="h-4 w-4" /> Filtros</a>
             </form>
             <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
               <p className="text-sm text-stone-600"><strong className="text-stone-900">{numero(total)}</strong> licitaciones encontradas</p>
               <div className="flex flex-wrap gap-1.5 text-xs">
                 {[[10000, "> 10 mil €"], [100000, "> 100 mil €"], [1000000, "> 1 M€"]].map(([v, l]) => (
                   <Link key={v} href={`/licitaciones${qs(sp, { importe: f.importeMin === v ? undefined : v, pagina: undefined })}`}
-                    className={`rounded-full px-3 py-1 ring-1 ${f.importeMin === v ? "bg-vino-700 text-white ring-vino-700" : "bg-white text-stone-600 ring-stone-300 hover:bg-stone-100"}`}>
+                    className={`rounded-full px-3 py-1 ring-1 ${f.importeMin === v ? "bg-vino-700 text-white ring-vino-700" : "bg-surface text-stone-600 ring-stone-300 hover:bg-stone-100"}`}>
                     {l}
                   </Link>
                 ))}
@@ -150,7 +152,7 @@ export default async function Licitaciones({ searchParams }: { searchParams: Pro
             ) : (
               <ul className="space-y-3">
                 {filas.map((l) => (
-                  <li key={l.id} className="card p-4 sm:p-5">
+                  <li key={l.id} className="card card-hover revelar p-4 sm:p-5">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div className="min-w-0">
                         <div className="mb-1.5 flex flex-wrap items-center gap-2">
