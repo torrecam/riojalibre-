@@ -137,7 +137,7 @@ No hace falta Vercel Cron: la ingesta va en GitHub Actions porque las funciones 
 
 ## Pendiente
 
-- Histórico de PLACE: en la base local de pruebas solo se cargaron octubre de 2026 (ZIP) y el feed del 9 al 18 de noviembre de 2026; agosto/septiembre fallaron por cortes de red (`ETIMEDOUT`) y no se reintentaron. En Supabase, lanza `place-zip --desde-mes 202401 --hasta-mes 202610 --borrar` desde Actions.
+- Histórico de PLACE: en la base local de pruebas solo se cargaron los ZIP de julio, agosto y octubre de 2026 y el feed del 9 al 18 de noviembre de 2026; septiembre de 2026 y el feed del 1 al 8 de noviembre fallaron por cortes de red (`ETIMEDOUT`) y no se reintentaron. En Supabase, lanza `place-zip --desde-mes 202401 --hasta-mes 202610 --borrar` desde Actions.
 - Panel `/admin` con Supabase Auth para relanzar cargas (hoy se hace desde GitHub Actions y el estado se ve en `/actualizaciones`).
 - Conectores de altos cargos y cargos municipales/ayuntamientos (las tablas existen; las fuentes no publican un fichero estable).
 - Las rutas inexistentes muestran la página «No encontrado», pero con código HTTP 200 en vez de 404 (efecto del streaming de Next.js).
