@@ -250,7 +250,16 @@ export async function cargarPlaceFeed(opts: { paginas?: number; desde?: string; 
     let act = 0;
     let rioja = 0;
     while (url && paginas < max) {
-      const { entries, next } = parsearAtom(await obtenerTexto(url));
+      let texto: string;
+      try {
+        texto = await obtenerTexto(url);
+      } catch (e) {
+        // Guarda lo acumulado antes de fallar para no perder las páginas ya leídas.
+        await acc.volcar();
+        await enlazarDuplicados();
+        throw e;
+      }
+      const { entries, next } = parsearAtom(texto);
       acc.add(entries);
       paginas++;
       const masAntigua = entries.map((e: X) => t(e.updated) ?? "").sort()[0];

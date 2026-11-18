@@ -34,9 +34,21 @@ export async function obtenerJson<T = unknown>(url: string): Promise<T> {
   return (await res.json()) as T;
 }
 
-export async function obtenerTexto(url: string): Promise<string> {
-  const res = await obtener(url);
-  return await res.text();
+/** Descarga el cuerpo completo como texto, reintentando también si falla la lectura del cuerpo
+ *  (las páginas "next" del feed de PLACE pesan 14-17 MB y pueden tardar más de un minuto). */
+export async function obtenerTexto(url: string, opts: { intentos?: number; timeoutMs?: number } = {}): Promise<string> {
+  const intentos = opts.intentos ?? 4;
+  let ultimo: unknown;
+  for (let i = 0; i < intentos; i++) {
+    try {
+      const res = await obtener(url, { intentos: 1, timeoutMs: opts.timeoutMs ?? 10 * 60_000 });
+      return await res.text();
+    } catch (e) {
+      ultimo = e;
+      await espera(2000 * (i + 1) ** 2);
+    }
+  }
+  throw ultimo;
 }
 
 /** Descarga a disco (con caché opcional por nombre). Devuelve la ruta local. */
