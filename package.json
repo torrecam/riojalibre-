@@ -9,7 +9,8 @@
     "lint": "eslint",
     "etl": "tsx etl/cli.ts",
     "db:migrar": "tsx etl/cli.ts migrar",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "DATABASE_URL=${DATABASE_URL:-postgres://localhost/test} tsx --test etl/test/*.test.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
