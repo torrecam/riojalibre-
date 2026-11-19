@@ -28,11 +28,12 @@ jobs:
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       BDNS_REGIONES: ${{ vars.BDNS_REGIONES || '20' }}
       PLACE_DESDE_MES: ${{ vars.PLACE_DESDE_MES || '202401' }}
-      ETL_CACHE_DIR: ${{ runner.temp }}/rioja-datos
       MODO: ${{ inputs.modo || 'diario' }}
       ARGUMENTOS: ${{ inputs.argumentos || '' }}
       SITE_URL: ${{ vars.SITE_URL }}
     steps:
+      - name: Preparar caché del ETL
+        run: echo "ETL_CACHE_DIR=$RUNNER_TEMP/rioja-datos" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -48,4 +49,5 @@ jobs:
         if: always() && env.SITE_URL != ''
         env:
           REVALIDATE_SECRET: ${{ secrets.REVALIDATE_SECRET }}
-        run: curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" "$SITE_URL/api/revalidar" || true
+        run: |
+          curl -fsS -X POST -H "authorization: Bearer $REVALIDATE_SECRET" "$SITE_URL/api/revalidar" || true
