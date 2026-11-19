@@ -61,10 +61,20 @@ export async function descargar(url: string, nombre: string, usarCache = false):
       if (s.size > 0) return destino;
     } catch {}
   }
-  const res = await obtener(url, { timeoutMs: 30 * 60_000 });
-  if (!res.body) throw new Error("Respuesta sin cuerpo");
-  await pipeline(Readable.fromWeb(res.body as never), createWriteStream(destino));
-  return destino;
+  let ultimo: unknown;
+  for (let i = 0; i < 4; i++) {
+    try {
+      const res = await obtener(url, { timeoutMs: 30 * 60_000 });
+      if (!res.body) throw new Error("Respuesta sin cuerpo");
+      await pipeline(Readable.fromWeb(res.body as never), createWriteStream(destino));
+      return destino;
+    } catch (e) {
+      ultimo = e;
+      console.error(`  Descarga ${nombre} fallida (intento ${i + 1}/4)`, e instanceof Error ? e.message : e);
+      await espera(5000 * (i + 1));
+    }
+  }
+  throw ultimo;
 }
 
 export async function leerJsonLocal<T = unknown>(ruta: string): Promise<T> {

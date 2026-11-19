@@ -13,7 +13,7 @@ import { claveEmpresa, claveOrganismo, upsertEmpresas, upsertOrganismos, type Or
 import { guardarLicitaciones, type LicitacionIn } from "./lib/licitaciones";
 import { ejecutar } from "./lib/runs";
 import { entero, fecha, limpiarTexto, num, PLACE_ESTADOS, PLACE_PROCEDIMIENTOS, PLACE_TIPOS } from "./lib/normaliza";
-import { sql } from "./lib/db";
+import { comprobarTamano, sql } from "./lib/db";
 
 export const FEED_PLACE =
   "https://contrataciondelestado.es/sindicacion/sindicacion_643/licitacionesPerfilesContratanteCompleto3.atom";
@@ -286,6 +286,7 @@ export async function cargarPlaceFeed(opts: { paginas?: number; desde?: string; 
 /** Histórico mensual: descarga el ZIP AAAAMM y procesa todos sus .atom. */
 export async function cargarPlaceZip(aaaamm: string, opts: { archivo?: string; borrarDespues?: boolean } = {}) {
   return ejecutar("place", `zip ${aaaamm}`, async () => {
+    await comprobarTamano(`antes de ZIP ${aaaamm}`);
     const ruta = opts.archivo ?? (await descargar(zipPlace(aaaamm), `place_${aaaamm}.zip`, true));
     const acc = new Acumulador();
     let ficheros = 0;
@@ -314,6 +315,7 @@ export async function cargarPlaceZip(aaaamm: string, opts: { archivo?: string; b
                 ins += r.insertados;
                 act += r.actualizados;
                 rioja += r.n;
+                if (ficheros % 500 === 0) await comprobarTamano(`durante ZIP ${aaaamm}`);
                 console.log(`  ZIP ${aaaamm}: ${ficheros} ficheros, ${acc.vistas} entradas, ${rioja} de La Rioja`);
               }
               zip.readEntry();

@@ -76,8 +76,22 @@ async function main() {
       const meses = a.has("mes")
         ? [a.get("mes")!]
         : mesesEntre(a.get("desde-mes") ?? "201801", a.get("hasta-mes") ?? new Date().toISOString().slice(0, 7).replace("-", ""));
-      for (const mes of meses) await cargarPlaceZip(mes, { archivo: a.get("archivo"), borrarDespues: a.has("borrar") });
+      const fallidos: string[] = [];
+      for (const mes of meses) {
+        try {
+          await cargarPlaceZip(mes, { archivo: a.get("archivo"), borrarDespues: a.has("borrar") });
+        } catch (e) {
+          const msg = e instanceof Error ? e.message : String(e);
+          if (msg.includes("límite de")) throw e; // protección de tamaño: parar
+          console.error(`ZIP ${mes} falló, se continúa:`, msg);
+          fallidos.push(mes);
+        }
+      }
       await derivados();
+      if (fallidos.length) {
+        console.error(`ZIP fallidos: ${fallidos.join(", ")}`);
+        process.exitCode = 1;
+      }
       break;
     }
     case "bdns":
