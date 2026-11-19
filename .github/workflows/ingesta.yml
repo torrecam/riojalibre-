@@ -30,7 +30,7 @@ jobs:
       PLACE_DESDE_MES: ${{ vars.PLACE_DESDE_MES || '202401' }}
       MODO: ${{ inputs.modo || 'diario' }}
       ARGUMENTOS: ${{ inputs.argumentos || '' }}
-      SITE_URL: ${{ vars.SITE_URL }}
+      SITE_URL: ${{ vars.SITE_URL || 'https://rioja-abierta.vercel.app' }}
     steps:
       - name: Preparar caché del ETL
         run: echo "ETL_CACHE_DIR=$RUNNER_TEMP/rioja-datos" >> "$GITHUB_ENV"
