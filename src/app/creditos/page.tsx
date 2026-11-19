@@ -18,7 +18,15 @@ export default function Creditos() {
           </div>
           <div className="p-5">
             <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">Ilustraciones y logotipo</h2>
-            <p className="mt-1 text-sm text-stone-500">SVG hechos a mano para Rioja Abierta. La silueta de La Rioja es estilizada, no cartográfica.</p>
+            <p className="mt-1 text-sm text-stone-500">SVG hechos a mano para Rioja Abierta.</p>
+          </div>
+        </section>
+        <section className="card p-5">
+          <h2 className="font-[family-name:var(--font-display)] text-lg font-bold">Silueta de La Rioja</h2>
+          <p className="mt-1 text-sm text-stone-500">Contorno real de la provincia (cód. 26) del GeoJSON spain-provinces del repositorio click_that_hood, simplificado y proyectado a SVG. Licencia MIT.</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a href="https://github.com/codeforgermany/click_that_hood" target="_blank" rel="noreferrer" className="chip bg-stone-100 text-stone-600 hover:underline">click_that_hood <ArrowUpRight className="h-3 w-3" /></a>
+            <a href="https://github.com/codeforgermany/click_that_hood/blob/main/LICENSE" target="_blank" rel="noreferrer" className="chip bg-vid-50 text-vid-700 hover:underline">MIT <ArrowUpRight className="h-3 w-3" /></a>
           </div>
         </section>
         <section className="card p-5">

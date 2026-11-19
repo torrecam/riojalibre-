@@ -4,16 +4,15 @@ import type { ReactNode } from "react";
 
 /* ---------- Fondo del hero: colinas, viñedos, malla de puntos y silueta de La Rioja ---------- */
 
-/** Silueta estilizada (no cartográfica) de La Rioja, en un viewBox 0 0 400 250. */
+/** Silueta real de La Rioja (provincia 26), proyectada con cos(lat) en un viewBox 0 0 400 250. Ver CREDITS.md. */
 const RIOJA =
-  "M18 96 C34 78 52 70 74 72 C92 58 112 60 128 66 C146 50 170 48 190 58 C208 50 228 52 246 60 C268 58 290 70 306 82 C330 86 352 98 372 112 C384 118 392 126 386 136 C370 142 352 150 336 162 C314 172 294 186 270 194 C248 210 222 222 196 226 C170 232 144 224 122 212 C100 204 80 192 62 176 C44 162 30 146 22 128 C16 116 12 104 18 96 Z";
-const EBRO = "M24 92 C48 76 70 78 92 70 C120 60 146 58 172 62 C202 66 230 56 258 64 C286 72 312 88 340 98 C358 104 374 114 388 126";
+  "M73.2 20.0 L84.1 20.8 L90.6 26.6 L104.2 21.7 L106.6 29.7 L111.5 28.5 L111.3 34.7 L106.8 37.7 L110.6 45.4 L120.3 37.7 L123.4 25.6 L128.3 25.7 L141.2 33.8 L135.8 56.3 L142.2 53.8 L148.3 66.1 L157.4 60.3 L159.2 69.1 L165.3 63.0 L173.5 66.1 L172.0 62.7 L177.9 55.5 L176.9 64.2 L198.1 64.0 L213.1 75.4 L216.5 70.3 L223.3 73.7 L225.6 70.8 L228.5 77.1 L249.8 88.1 L263.4 84.5 L262.6 90.6 L270.5 99.6 L268.1 105.7 L272.4 107.0 L284.0 99.2 L293.6 103.8 L294.8 109.4 L304.9 111.5 L305.9 119.3 L315.2 122.6 L314.9 133.1 L319.7 131.2 L329.9 141.6 L346.4 144.2 L351.0 150.7 L356.1 150.9 L351.7 156.2 L356.2 162.5 L347.6 167.8 L343.3 163.0 L334.9 166.5 L323.4 163.5 L306.9 189.3 L308.6 197.9 L320.3 204.2 L320.9 210.2 L316.4 213.0 L318.2 216.3 L293.8 230.0 L281.3 220.1 L279.6 224.1 L262.9 217.8 L260.8 207.9 L264.3 205.7 L252.6 187.1 L260.1 183.1 L258.8 177.1 L236.6 176.7 L229.5 180.8 L226.8 168.3 L219.1 164.3 L193.2 166.6 L183.4 175.6 L176.9 173.2 L176.8 186.5 L169.5 191.6 L162.8 207.6 L127.0 203.8 L124.7 196.9 L135.8 176.4 L129.6 170.2 L117.4 174.9 L116.0 192.9 L96.3 203.5 L91.2 199.9 L87.4 181.3 L65.2 181.5 L44.8 148.7 L53.6 135.1 L49.0 104.4 L59.0 102.9 L54.4 94.6 L50.0 94.3 L50.8 85.5 L55.8 85.8 L54.8 91.1 L60.4 99.0 L59.0 83.1 L62.7 77.2 L52.3 64.7 L57.0 52.9 L43.8 49.1 L59.7 35.4 L54.5 20.4 Z";
 const CIUDADES = [
-  { x: 76, y: 82, n: "Haro" },
-  { x: 214, y: 80, n: "Logroño", grande: true },
-  { x: 318, y: 110, n: "Calahorra" },
-  { x: 150, y: 120, n: "Nájera" },
-  { x: 364, y: 128, n: "Alfaro" },
+  { x: 105, y: 39, n: "Haro" },
+  { x: 192, y: 71, n: "Logroño", grande: true },
+  { x: 295, y: 118, n: "Calahorra" },
+  { x: 131, y: 86, n: "Nájera" },
+  { x: 341, y: 154, n: "Alfaro" },
 ];
 
 export function FondoHero() {
@@ -49,10 +48,7 @@ export function FondoHero() {
           </linearGradient>
         </defs>
         <path d={RIOJA} fill="url(#mapa)" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="1.5" strokeLinejoin="round" />
-        <path d={EBRO} stroke="#9cc5e8" strokeOpacity="0.55" strokeWidth="2.5" strokeLinecap="round" strokeDasharray="1 7" className="animate-fluir" />
-        {/* conexiones */}
-        <path d="M214 80 L76 82 M214 80 L318 110 M214 80 L150 120 M318 110 L364 128" stroke="#f7c6d4" strokeOpacity="0.25" strokeWidth="1" strokeDasharray="3 4" />
-        {CIUDADES.map((c) => (
+                {CIUDADES.map((c) => (
           <g key={c.n}>
             <circle cx={c.x} cy={c.y} r={c.grande ? 10 : 7} fill="#f7c6d4" fillOpacity="0.15" className="animate-latido" style={{ transformOrigin: `${c.x}px ${c.y}px`, transformBox: "view-box" }} />
             <circle cx={c.x} cy={c.y} r={c.grande ? 4 : 2.6} fill={c.grande ? "#f7c6d4" : "#cbe5a8"} />
@@ -263,7 +259,6 @@ export function IlustCTA({ className = "" }: { className?: string }) {
   return (
     <svg viewBox="0 0 400 250" className={className} aria-hidden fill="none" strokeLinecap="round" strokeLinejoin="round">
       <path d={RIOJA} fill="#ffffff" fillOpacity="0.08" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="1.5" />
-      <path d={EBRO} stroke="#9cc5e8" strokeOpacity="0.5" strokeWidth="2.5" strokeDasharray="1 7" />
       {/* ayuntamiento */}
       <g transform="translate(150 70)">
         <path d="M0 40 L50 12 L100 40 Z" fill="#f7c6d4" />
